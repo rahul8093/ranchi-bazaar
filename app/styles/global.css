@@ -1,0 +1,35 @@
+body{
+    background: white;
+}
+/* .homepage {
+    padding: 0 120px;
+  } */
+  
+
+.container{
+    padding-right: 120px;
+    padding-left: 120px;
+    max-width: 100%;
+}
+
+.hero-banner{
+    background: rebeccapurple
+}
+
+.hero-product-description{
+    width: 70%;
+}
+
+.item-left{
+    align-items: flex-start;
+}
+
+.theme-gradient {
+    background: linear-gradient(to bottom, #2C3454 10%, #83CA95 100%);
+  }
+
+/* .shadow-md-rb {
+    @apply focus:outline-none focus:ring focus:border-green-400
+    transition-all duration-300 hover:border-green-500 hover:shadow-[0_0_12px_#83CA95] shadow-md
+} */
+
