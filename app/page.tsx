@@ -3,7 +3,7 @@
 
 import Header from '@/components/Header';
 import HomePage from './homepage/page'; // Import the HomePage component
-import { fetchProducts } from './lib/fetchProducts';
+import { fetchProducts } from './lib/saleor/queries/fetchProducts';
 import './styles/global.css'
 import Footer from '@/components/Footer';
 

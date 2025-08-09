@@ -81,7 +81,7 @@ const HomePage = ({ products }: HomePageProps) => {
       <HeroBannerCarousel products={products} />
 
       {/* ✅ Deal Strip */}
-      <section className="container mx-auto px-4 py-6">
+      {/* <section className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
             Grab the best deal on <span className="text-green-600">Smartphones</span>
@@ -110,7 +110,64 @@ const HomePage = ({ products }: HomePageProps) => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
+      <section className="container mx-auto px-4 py-6">
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-lg font-semibold">
+      Grab the best deal on <span className="text-green-600">Smartphones</span>
+    </h2>
+    <Link href="/smartphones" className="text-sm text-gray-600 hover:underline">
+      View All →
+    </Link>
+  </div>
+
+  <div className="flex overflow-x-auto gap-4 scrollbar-hide">
+    {products.slice(0, 6).map((product) => {
+      const oldPrice = product.pricing.priceRange.start.gross.amount + 10000; // example old price
+      const newPrice = product.pricing.priceRange.start.gross.amount;
+      const discountPercent = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
+      const saveAmount = oldPrice - newPrice;
+
+      return (
+        <div
+          key={product.id}
+          className="min-w-[160px] border p-3 rounded shadow hover:shadow-md relative flex flex-col"
+        >
+          {/* Discount badge */}
+          <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
+            {discountPercent}% OFF
+          </div>
+
+
+
+          {/* Image */}
+          <div className="relative w-full h-44 mb-2 bg-gray-100">
+            <Image
+              src={product.thumbnail.url}
+              alt={product.thumbnail.alt || product.name}
+              fill
+              className="object-contain"
+            />
+          </div>
+
+          {/* Product Name */}
+          <h3 className="text-sm font-medium text-black">{product.name}</h3>
+
+          {/* Prices */}
+          <p className="text-xs line-through text-gray-400">₹{oldPrice}</p>
+          <p className="text-green-600 font-semibold text-sm">₹{newPrice}</p>
+          <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
+
+          {/* Button */}
+          <button className="mt-auto w-full border cursor-pointer border-green-500 bg-white text-green-700 text-sm py-1 rounded hover:bg-green-50">
+            ADD
+          </button>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
 
       {/* ✅ Top Categories */}
       <section className="container mx-auto px-4 py-6">

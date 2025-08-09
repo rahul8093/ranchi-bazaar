@@ -1,6 +1,6 @@
 // lib/fetchProducts.ts
 import { gql } from "@apollo/client";
-import apolloClient from "./apolloClient.js";
+import apolloClient from "../apolloClient.js";
 import { ApolloError } from '@apollo/client';
 
 // Define TypeScript interfaces for product data

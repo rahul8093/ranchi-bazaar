@@ -158,7 +158,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="w-full">
+    <header className="w-full mb-8">
       {/* ✅ Top Bar */}
       <div className="bg-[#3b487f] text-white text-sm py-2 px-4 flex justify-between items-center">
         <span>Welcome to Ranchi Bazaar</span>
@@ -186,7 +186,7 @@ const Header = () => {
         </div>
 
         {/* Search bar */}
-        <div className="relative flex-1 max-w-[507px] w-full hidden md:block">
+        <div className="relative flex-1 max-w-[507px] w-full hidden md:block hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]">
           <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
             <SearchIcon />
           </div>
@@ -196,7 +196,7 @@ const Header = () => {
           <input
             type="text"
             placeholder="Search essentials, groceries and more..."
-            className="w-full pl-8 pr-8 py-2 border rounded-md text-sm shadow-md-rb"
+            className="w-full text-black pl-8 pr-8 py-2 border rounded-md text-sm shadow-md-rb focus-visible:border-green-500"
           />
         </div>
 

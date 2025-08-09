@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { parseSaleorDescription } from '@/app/lib/common';
+import { parseSaleorDescription } from '@/app/lib/saleor/helpers/common';
 
 // type Slide = {
 //   id: number;
