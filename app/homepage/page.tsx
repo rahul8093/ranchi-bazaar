@@ -72,45 +72,13 @@ interface Product {
 }
 
 interface HomePageProps {
-  products: Product[];
+  products?: Product[];
 }
 
-const HomePage = ({ products }: HomePageProps) => {
+const HomePage = ({  products = [] }: HomePageProps) => {
   return (
     <div className="w-full">
       <HeroBannerCarousel products={products} />
-
-      {/* ✅ Deal Strip */}
-      {/* <section className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">
-            Grab the best deal on <span className="text-green-600">Smartphones</span>
-          </h2>
-          <Link href="/smartphones" className="text-sm text-gray-600">View All →</Link>
-        </div>
-
-        <div className="flex overflow-x-auto gap-4 scrollbar-hide">
-          {products.slice(0, 6).map((product) => (
-            <div key={product.id} className="min-w-[160px] border p-3 rounded shadow hover:shadow-md">
-              <div className="relative w-full h-40 mb-2">
-                <Image
-                  src={product.thumbnail.url}
-                  alt={product.thumbnail.alt || product.name}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <h3 className="text-sm font-medium">{product.name}</h3>
-              <p className="text-sm line-through text-gray-400">₹24999</p>
-              <p className="text-green-600 font-semibold">₹{product.pricing.priceRange.start.gross.amount}</p>
-              <p className="text-xs text-green-500">Save ₹{4500}</p>
-              <button className="mt-2 w-full bg-green-100 text-green-700 text-sm py-1 rounded border border-green-500 hover:bg-green-200">
-                ADD
-              </button>
-            </div>
-          ))}
-        </div>
-      </section> */}
       <section className="container mx-auto px-4 py-6">
   <div className="flex justify-between items-center mb-4">
     <h2 className="text-lg font-semibold">
@@ -122,7 +90,7 @@ const HomePage = ({ products }: HomePageProps) => {
   </div>
 
   <div className="flex overflow-x-auto gap-4 scrollbar-hide">
-    {products.slice(0, 6).map((product) => {
+    {products?.slice(0, 6).map((product) => {
       const oldPrice = product.pricing.priceRange.start.gross.amount + 10000; // example old price
       const newPrice = product.pricing.priceRange.start.gross.amount;
       const discountPercent = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
