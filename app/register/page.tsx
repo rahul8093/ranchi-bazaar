@@ -12,6 +12,9 @@ export default function SignupPage() {
         password: '',
         agree: false,
     });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -21,22 +24,47 @@ export default function SignupPage() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
 
         if (!form.agree) {
             alert('You must agree to the terms & policy.');
             return;
         }
 
-        // TODO: Call your signup API (e.g. Saleor `accountRegister` mutation)
-        console.log('Signing up user:', form);
+        setLoading(true);
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: form.name,
+                    email: form.email,
+                    password: form.password,
+                }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.errors?.[0]?.message || 'Failed to register');
+            } else {
+                setSuccess(true);
+            }
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4 bg-white">
             <div className="w-full text-black max-w-md border border-green-500 rounded-lg shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-center mb-6">Get Started Now</h2>
+
+                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+                {success && <p className="text-green-600 text-sm mb-4">Account created! Please check your email to verify.</p>}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -54,12 +82,7 @@ export default function SignupPage() {
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block font-medium mb-1">
-                            Email address
-                            {/* <Link href="/forgot-password" className="float-right text-sm text-blue-600 hover:underline">
-                                forgot password ?
-                            </Link> */}
-                        </label>
+                        <label htmlFor="email" className="block font-medium mb-1">Email address</label>
                         <input
                             id="email"
                             name="email"
@@ -102,9 +125,10 @@ export default function SignupPage() {
 
                     <button
                         type="submit"
+                        disabled={loading}
                         className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition"
                     >
-                        SignUp
+                        {loading ? 'Signing Up...' : 'Sign Up'}
                     </button>
                 </form>
 

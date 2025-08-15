@@ -1,24 +1,50 @@
-// app/login/page.tsx
 'use client';
 
 import Link from 'next/link';
 import { FaGoogle, FaApple } from 'react-icons/fa';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Handle actual login logic
-        console.log({ email, password });
+        setLoading(true);
+        setError('');
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data?.error || 'Invalid credentials');
+                return;
+            }
+
+            router.push('/');
+        } catch (err) {
+            console.error("Login failed:", err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-white px-4">
             <div className="w-full text-black max-w-md border border-green-500 rounded-lg shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+
+                {/* {error && <p className="text-red-500 text-center mb-3">{error}</p>} */}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -54,9 +80,10 @@ export default function SignInPage() {
 
                     <button
                         type="submit"
-                        className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition"
+                        disabled={loading}
+                        className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition disabled:opacity-50"
                     >
-                        Sign In
+                        {loading ? 'Signing In...' : 'Sign In'}
                     </button>
                 </form>
 

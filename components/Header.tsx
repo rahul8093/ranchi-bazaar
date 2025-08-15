@@ -1,135 +1,3 @@
-// 'use client';
-
-// import Link from 'next/link';
-// import { useState } from 'react';
-// import { FiShoppingCart, FiMenu, FiX } from 'react-icons/fi';
-// import Sidebar from './SideBar';
-// import Logo from './Logo/Logo';
-// import HamburgerIcon from './HamburgerIcon';
-// import UserLogo from './Logo/UserLogo';
-// import SearchIcon from './Logo/SearchIcon';
-// import ListIcon from './Logo/ListIcon';
-
-
-// const Header = () => {
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-//   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-//   return (
-//     <header className="w-full bg-white shadow-md">
-//       <div className='container'>
-//         {/* <div className="flex justify-between items-center"> */}
-//         <div className="flex items-center space-x-2" id="HeaderTop">
-//           {/* Logo or Sidebar Toggle */}
-//         </div>
-
-
-//         <div className="flex items-center" id="HeaderMiddle">
-//           {/* Side bar + Logo */}
-//           <div className="flex items-center space-x-4">
-//             <button
-//               onClick={() => setIsSidebarOpen(true)}
-//               className="w-12 h-12 bg-white rounded-lg shadow-md flex items-center justify-center
-//             transition-all duration-300 hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]"
-//             >
-//               <HamburgerIcon />
-//             </button>
-//             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-//             {/* Logo */}
-//             <Link href="/">
-//               <Logo />
-//             </Link>
-//           </div>
-
-
-//           {/* Search + Cart */}
-//           <div className="flex items-center space-x-4 w-full justify-end">
-//             {/* Search (optional, can add input logic) */}
-//             <div className="relative hidden md:block max-w-[507px] w-full">
-//               {/* Search Icon (left) */}
-//               <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
-//                 <SearchIcon />
-//               </div>
-
-//               {/* List Icon (right) */}
-//               <div className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
-//                 <ListIcon />
-//               </div>
-
-//               {/* Input Field */}
-//               <input
-//                 type="text"
-//                 placeholder="Search products..."
-//                 className="w-full pl-8 pr-8 py-1 border rounded-md text-sm shadow-md-rb"
-//               />
-//             </div>
-
-
-//             {/* Login / Profile */}
-//             <div className="flex items-center space-x-2 cursor-pointer">
-//               {/* User Icon */}
-//               <div className=" flex items-center justify-center">
-//                 <UserLogo />
-//               </div>
-//               {/* Dynamic Text */}
-//               <span className="text-sm text-gray-700">
-//                 {'Hello, xyz'}
-//               </span>
-//             </div>
-//             {/* Vertical Divider */}
-//             <div className="h-6 w-px bg-gray-300" />
-
-//             {/* Cart */}
-//             <Link href="/cart" className="flex gap-2 relative text-gray-600 hover:text-gray-900">
-//               <div className='relative'>
-//                 <FiShoppingCart size={24} />
-//                 <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-//                   3
-//                 </span>
-//               </div>
-
-//               <span>Cart</span>
-//             </Link>
-
-//             {/* Mobile Menu Toggle */}
-//             <button
-//               className="md:hidden text-gray-600 hover:text-gray-900"
-//               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-//               aria-label="Toggle mobile menu"
-//             >
-//               {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-//             </button>
-//           </div>
-
-//         </div>
-
-
-//         <div className="flex items-center space-x-4" id="HeaderBottom">
-//           {/* Desktop Nav */}
-//           <nav className="hidden md:flex space-x-6">
-//             <Link href="/shop" className="text-gray-600 hover:text-gray-900">Shop</Link>
-//             <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
-//             <Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
-//           </nav>
-//         </div>
-
-//       </div>
-//       {/* </div> */}
-
-//       {/* Mobile Nav */}
-//       {mobileMenuOpen && (
-//         <div className="md:hidden bg-white px-4 pb-4 space-y-2">
-//           <Link href="/shop" className="block text-gray-700">Shop</Link>
-//           <Link href="/about" className="block text-gray-700">About</Link>
-//           <Link href="/contact" className="block text-gray-700">Contact</Link>
-//         </div>
-//       )}
-//     </header>
-//   );
-// };
-
-// export default Header;
-
 'use client';
 
 import Link from 'next/link';
@@ -141,10 +9,12 @@ import HamburgerIcon from './HamburgerIcon';
 import UserLogo from './Logo/UserLogo';
 import SearchIcon from './Logo/SearchIcon';
 import ListIcon from './Logo/ListIcon';
+import { useCurrentUser } from '@/app/hooks/useCurrentUser';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user, loading } = useCurrentUser();
 
   const categories = [
     'Groceries',
@@ -203,10 +73,26 @@ const Header = () => {
         {/* User + Cart */}
         <div className="flex items-center gap-4">
           {/* User */}
-          <div className="flex items-center gap-2 cursor-pointer">
-            <UserLogo />
-            <span className="text-sm text-gray-700">Hello, XYZ</span>
-          </div>
+          {/* User */}
+          {loading ? (
+  <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
+    <UserLogo />
+    Loading...
+  </span>
+) : user ? (
+  // User is logged in — no login link, just greeting
+  <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
+    <UserLogo />
+    Hello, {user.firstName || user.email}
+  </span>
+) : (
+  // No user — show login link
+  <Link href="/login" className="flex items-center gap-2 text-sm text-gray-700">
+    <UserLogo />
+    Sign in
+  </Link>
+)}
+
 
           {/* Cart */}
           <Link href="/cart" className="flex items-center gap-2 relative text-gray-700 hover:text-black">
@@ -217,7 +103,7 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* Mobile Menu Toggle (optional) */}
+          {/* Mobile Menu Toggle */}
           <button
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -234,9 +120,8 @@ const Header = () => {
           {categories.map((cat, index) => (
             <button
               key={index}
-              className={`text-sm px-4 py-2 rounded shadow ${
-                index === 0 ? 'bg-green-600 text-white' : 'bg-white text-gray-700'
-              } hover:shadow-md border`}
+              className={`text-sm px-4 py-2 rounded shadow ${index === 0 ? 'bg-green-600 text-white' : 'bg-white text-gray-700'
+                } hover:shadow-md border`}
             >
               {cat}
             </button>
@@ -244,7 +129,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* ✅ Mobile Nav (optional) */}
+      {/* ✅ Mobile Nav */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white px-4 pb-4 space-y-2">
           {categories.map((cat, index) => (
