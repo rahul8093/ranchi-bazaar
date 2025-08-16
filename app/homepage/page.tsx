@@ -4,11 +4,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import HeroBannerCarousel from '@/components/HeroBannerCarousel';
-// import { useCart } from '../hooks/useCart';
-import Spinner from '@/components/Spinner';
 import { Product } from '../lib/saleor/queries/fetchProducts';
 import { useCart } from '../context/CartContext';
-
+import { CheckoutLine } from '../lib/saleor/queries/fetchCheckout';
+import { Button } from '@/components/ui/button';
+import { Loader2Icon } from 'lucide-react';
 
 // interface Product {
 //   id: string;
@@ -20,11 +20,13 @@ import { useCart } from '../context/CartContext';
 
 interface HomePageProps {
   products?: Product[];
+  cartItems?: CheckoutLine[];
+  updateCartItem?: (lineId: string, quantity: number) => void;
+  removeCartItem?: (lineId: string) => void;
 }
 
 const HomePage = ({ products = [] }: HomePageProps) => {
-  const { addToCart, loadingProductId } = useCart();
-
+  const { addToCart, loadingProductId, cartItems, updateCartItem } = useCart();
 
   return (
     <div className="w-full">
@@ -40,11 +42,17 @@ const HomePage = ({ products = [] }: HomePageProps) => {
         </div>
 
         <div className="flex overflow-x-auto gap-4 scrollbar-hide">
-          {products?.slice(0, 6).map((product) => {
+          {products?.map((product) => {
             const oldPrice = product.pricing.priceRange.start.gross.amount + 10000; // example old price
             const newPrice = product.pricing.priceRange.start.gross.amount;
             const discountPercent = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
             const saveAmount = oldPrice - newPrice;
+            const cartItem = cartItems.find(item => item.variant.id === product?.variants[0].id);
+            const quantity = cartItem?.quantity ?? 0;
+            const loading =
+              loadingProductId === product.variants[0].id ||
+              loadingProductId === cartItem?.id;
+
 
             return (
               <div
@@ -77,14 +85,62 @@ const HomePage = ({ products = [] }: HomePageProps) => {
                 <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
 
                 {/* Button */}
-                <button
+                {/* <button
                   onClick={() => addToCart(product.variants[0].id)}
                   className="mt-auto w-full border cursor-pointer border-green-500 bg-white text-green-700 text-sm py-1 rounded hover:bg-green-50"
                   disabled={loadingProductId === product.id}
                 >
 
-                  {loadingProductId === product.id ? <Spinner /> : 'ADD'}
-                </button>
+                  {loadingProductId === product.variants[0].id ? <Spinner /> : 'ADD'}
+
+                </button> */}
+
+                <div >
+
+                  <div className="mt-auto">
+                    {loading ? (
+                      <Button size="sm" disabled
+                        className='mt-2 w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white cursor-not-allowed'>
+                        <Loader2Icon className="animate-spin" />
+                        Please wait
+                      </Button>
+                    ) : quantity > 0 ? (
+                      <div className="flex items-center justify-between border border-green-500 rounded mt-2">
+                        <button
+                          onClick={() => {
+                            if (cartItem) {
+                              updateCartItem(cartItem.id, cartItem.quantity - 1);
+                            }
+                          }}
+
+                          className="w-10 text-green-700 py-1 hover:bg-green-50"
+                        >
+                          –
+                        </button>
+                        <span className="text-green-700">{quantity}</span>
+                        <button
+                          onClick={() => {
+                            if (cartItem) {
+                              updateCartItem(cartItem.id, cartItem.quantity + 1);
+                            }
+                          }}
+                          className="w-10 text-green-700 py-1 hover:bg-green-50"
+                        >
+                          +
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => addToCart(product.variants[0].id)}
+                        className="mt-2 w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white hover:bg-green-50"
+                      >
+                        ADD
+                      </button>
+                    )}
+                  </div>
+
+                </div>
+
               </div>
             );
           })}

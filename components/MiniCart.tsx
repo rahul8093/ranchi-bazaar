@@ -3,6 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { CheckoutLine } from '@/app/lib/saleor/queries/fetchCheckout';
+import { Loader2Icon } from 'lucide-react';
+import { ScrollArea } from './ui/scroll-area';
 
 type MiniCartProps = {
     isOpen: boolean;
@@ -11,6 +13,7 @@ type MiniCartProps = {
     total: number;
     updateCartItem: (lineId: string, quantity: number) => void;
     removeCartItem: (lineId: string) => void;
+    loadingProductId: string | null
 };
 
 const MiniCart: React.FC<MiniCartProps> = ({
@@ -20,11 +23,14 @@ const MiniCart: React.FC<MiniCartProps> = ({
     total,
     updateCartItem,
     removeCartItem,
+    loadingProductId
 }) => {
+
     return (
         <>
             {/* Overlay */}
             {isOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={onClose} />}
+
 
             {/* MiniCart Sidebar */}
             <div
@@ -38,65 +44,73 @@ const MiniCart: React.FC<MiniCartProps> = ({
                         &times;
                     </button>
                 </div>
-
-                <div className="p-4 space-y-4 flex flex-col flex-grow overflow-auto">
-                    {items.length === 0 ? (
-                        <p className="text-center text-white/70 mt-10">Your cart is empty.</p>
-                    ) : (
-                        items.map((item) => {
-                            const price = (item.variant?.pricing?.price?.gross?.amount ?? 0) * item.quantity;
-                            return (
-                                <div key={item.id} className="border-b border-white/20 py-2">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <p className="font-medium">{item?.variant?.product?.name}</p>
-                                        <Image
-                                            src={item?.variant?.product?.thumbnail?.url || ''}
-                                            alt={item?.variant?.product?.thumbnail?.alt || 'product_image'}
-                                            width={50}
-                                            height={20}
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <button
-                                                onClick={() =>
-                                                    item.quantity > 1 &&
-                                                    updateCartItem(item.id, item.quantity - 1)
-                                                }
-                                                className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
-                                                aria-label="Decrease quantity"
-                                                disabled={item.quantity===1}
-                                            >
-                                                -
-                                            </button>
-                                            <span>{item.quantity}</span>
-                                            <button
-                                                onClick={() =>
-                                                    updateCartItem(item.id, item.quantity + 1)
-                                                }
-                                                className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
-                                                aria-label="Increase quantity"
-                                            >
-                                                +
-                                            </button>
+                <ScrollArea className="flex-grow h-[calc(100%-200px)]">
+                    <div className="p-4 space-y-4 flex flex-col flex-grow overflow-auto">
+                        {items.length === 0 ? (
+                            <p className="text-center text-white/70 mt-10">Your cart is empty.</p>
+                        ) : (
+                            items.map((item) => {
+                                const price = (item.variant?.pricing?.price?.gross?.amount ?? 0) * item.quantity;
+                                const loading =
+                                    loadingProductId === item?.id ||
+                                    loadingProductId === item?.variant.id
+                                return (
+                                    <div key={item.id} className="border-b border-white/20 py-2">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <p className="font-medium">{item?.variant?.product?.name}</p>
+                                            <Image
+                                                src={item?.variant?.product?.thumbnail?.url || ''}
+                                                alt={item?.variant?.product?.thumbnail?.alt || 'product_image'}
+                                                width={50}
+                                                height={20}
+                                            />
                                         </div>
 
-                                        <p>${price.toFixed(2)}</p>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-2">
+                                                <button
+                                                    onClick={() =>
+                                                        item.quantity > 1 &&
+                                                        updateCartItem(item.id, item.quantity - 1)
+                                                    }
+                                                    className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                                                    aria-label="Decrease quantity"
+                                                    disabled={item.quantity === 1 || loading}
+                                                >
+                                                    -
+                                                </button>
+                                                <span>{item.quantity}</span>
+                                                <button
+                                                    onClick={() =>
+                                                        updateCartItem(item.id, item.quantity + 1)
+                                                    }
+                                                    className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                                                    aria-label="Increase quantity"
+                                                    disabled={loading}
+                                                >
+                                                    +
+                                                </button>
+                                                {loading && <Loader2Icon className="animate-spin" />}
+                                            </div>
 
-                                        <button
-                                            onClick={() => removeCartItem(item.id)}
-                                            className="text-red-500 hover:text-red-700 font-semibold"
-                                            aria-label="Remove item"
-                                        >
-                                            Remove
-                                        </button>
+                                            <p>${price.toFixed(2)}</p>
+
+                                            <button
+                                                onClick={() => removeCartItem(item.id)}
+                                                className="text-red-500 hover:text-red-700 font-semibold"
+                                                aria-label="Remove item"
+                                                disabled={loading}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })
-                    )}
-                </div>
+                                );
+                            })
+                        )}
+                    </div>
+                </ScrollArea>
+
 
                 {items.length > 0 && (
                     <div className="p-4 border-t border-white/40">

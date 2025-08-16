@@ -16,7 +16,7 @@ import MiniCart from './MiniCart';
 
 
 const Header = () => {
-  const { cartCount,cartItems,totalPrice,updateCartItem,removeCartItem } = useCart();
+  const { cartCount,cartItems,totalPrice,updateCartItem,removeCartItem,loadingProductId } = useCart();
   const [isMiniCartOpen, setMiniCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -153,6 +153,7 @@ const Header = () => {
         total={totalPrice} 
         updateCartItem={updateCartItem} 
         removeCartItem={removeCartItem} 
+        loadingProductId={loadingProductId}
         />
     </header>
   );
