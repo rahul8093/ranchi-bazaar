@@ -57,7 +57,7 @@ const HomePage = ({ products = [] }: HomePageProps) => {
             return (
               <div
                 key={product.id}
-                className="min-w-[160px] border p-3 rounded shadow hover:shadow-md relative flex flex-col"
+                className={`${loading?'animate-pulse':""} min-w-[160px] border p-3 rounded shadow hover:shadow-md relative flex flex-col`}
               >
                 {/* Discount badge */}
                 <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">

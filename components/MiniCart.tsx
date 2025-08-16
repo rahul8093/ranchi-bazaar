@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { CheckoutLine } from '@/app/lib/saleor/queries/fetchCheckout';
 import { Loader2Icon } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
+import { Button } from './ui/button';
+import { Trash2,CircleMinus,CirclePlus } from 'lucide-react';
+
 
 type MiniCartProps = {
     isOpen: boolean;
@@ -55,7 +58,7 @@ const MiniCart: React.FC<MiniCartProps> = ({
                                     loadingProductId === item?.id ||
                                     loadingProductId === item?.variant.id
                                 return (
-                                    <div key={item.id} className="border-b border-white/20 py-2">
+                                    <div key={item.id} className={`${loading?'animate-pulse':''} border-b border-white/20 py-2`} >
                                         <div className="flex justify-between items-center mb-1">
                                             <p className="font-medium">{item?.variant?.product?.name}</p>
                                             <Image
@@ -63,6 +66,7 @@ const MiniCart: React.FC<MiniCartProps> = ({
                                                 alt={item?.variant?.product?.thumbnail?.alt || 'product_image'}
                                                 width={50}
                                                 height={20}
+                                                className={`${loading?'animate-bounce':''}`}
                                             />
                                         </div>
 
@@ -73,36 +77,40 @@ const MiniCart: React.FC<MiniCartProps> = ({
                                                         item.quantity > 1 &&
                                                         updateCartItem(item.id, item.quantity - 1)
                                                     }
-                                                    className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                                                    className="px-2 py-1 rounded hover:scale-110"
                                                     aria-label="Decrease quantity"
                                                     disabled={item.quantity === 1 || loading}
                                                 >
-                                                    -
+                                                    {/* - */}
+                                                    <CircleMinus/>
                                                 </button>
                                                 <span>{item.quantity}</span>
                                                 <button
                                                     onClick={() =>
                                                         updateCartItem(item.id, item.quantity + 1)
                                                     }
-                                                    className="px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                                                    className="px-2 py-1 rounded hover:scale-110"
                                                     aria-label="Increase quantity"
                                                     disabled={loading}
                                                 >
-                                                    +
+                                                    {/* + */}
+                                                    <CirclePlus/>
                                                 </button>
                                                 {loading && <Loader2Icon className="animate-spin" />}
                                             </div>
 
                                             <p>${price.toFixed(2)}</p>
 
-                                            <button
+                                            <Button
                                                 onClick={() => removeCartItem(item.id)}
-                                                className="text-red-500 hover:text-red-700 font-semibold"
+                                                className="text-white-500 hover:text-accent-foreground font-semibold"
                                                 aria-label="Remove item"
                                                 disabled={loading}
+                                                variant='destructive'
                                             >
-                                                Remove
-                                            </button>
+                                                <Trash2/>
+                                                
+                                            </Button>
                                         </div>
                                     </div>
                                 );
