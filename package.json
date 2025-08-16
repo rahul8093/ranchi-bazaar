@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.6",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.3",
     "@saleor/auth-sdk": "^1.0.2",

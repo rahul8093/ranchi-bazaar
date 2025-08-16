@@ -5,9 +5,11 @@ import { FaGoogle, FaApple } from 'react-icons/fa';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 
 export default function SignInPage() {
     const router = useRouter();
+    const { refresh } = useCurrentUser();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -29,11 +31,14 @@ export default function SignInPage() {
 
             if (!res.ok) {
                 setError(data?.error || 'Invalid credentials');
-                toast.error(error);
+                toast.error(error || 'something went wrong');
                 return;
             }
-
-            router.push('/');
+            if (res.ok) {
+                await refresh();
+                router.push('/');
+            }
+            // router.push('/');
         } catch (err) {
             console.error("Login failed:", err);
             toast.error(error);

@@ -12,15 +12,17 @@ import ListIcon from './Logo/ListIcon';
 import { useCurrentUser } from '@/app/hooks/useCurrentUser';
 import { useCart } from '@/app/context/CartContext';
 import MiniCart from './MiniCart';
+import { CategoryNavigationMenu } from './CategoryNavigationMenu';
+import UserDropdown from './UserDropdown';
 // import { useCart } from '@/app/hooks/useCart';
 
 
 const Header = () => {
-  const { cartCount,cartItems,totalPrice,updateCartItem,removeCartItem,loadingProductId } = useCart();
+  const { cartCount, cartItems, totalPrice, updateCartItem, removeCartItem, loadingProductId } = useCart();
   const [isMiniCartOpen, setMiniCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, loading } = useCurrentUser();
+  const { loading } = useCurrentUser();
   // const total = 989
 
   const categories = [
@@ -80,29 +82,20 @@ const Header = () => {
         {/* User + Cart */}
         <div className="flex items-center gap-4">
           {/* User */}
-          {/* User */}
           {loading ? (
             <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
               <UserLogo />
               Loading...
             </span>
-          ) : user ? (
-            // User is logged in — no login link, just greeting
-            <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
-              <UserLogo />
-              Hello, {user.firstName || user.email}
-            </span>
           ) : (
-            // No user — show login link
-            <Link href="/login" className="flex items-center gap-2 text-sm text-gray-700">
-              <UserLogo />
-              Sign in
-            </Link>
+            <UserDropdown />
           )}
 
 
+
+
           {/* Cart */}
-          <button onClick={() =>setMiniCartOpen(true)} className="flex items-center gap-2 relative text-gray-700 hover:text-black">
+          <button onClick={() => setMiniCartOpen(true)} className="flex items-center gap-2 relative text-gray-700 hover:text-black">
             <FiShoppingCart size={22} />
             <span className="text-sm">Cart</span>
             <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
@@ -121,8 +114,8 @@ const Header = () => {
         </div>
       </div>
 
-      {/* ✅ Bottom Category Nav */}
-      <div className="bg-white border-t shadow-sm py-2 px-4 overflow-x-auto scrollbar-hide">
+      {/*  Bottom Category Nav */}
+      {/* <div className="bg-white border-t shadow-sm py-2 px-4 overflow-x-auto scrollbar-hide">
         <div className="flex gap-2 whitespace-nowrap">
           {categories.map((cat, index) => (
             <button
@@ -134,9 +127,13 @@ const Header = () => {
             </button>
           ))}
         </div>
+      </div> */}
+      <div className='hidden md:flex'>
+        <CategoryNavigationMenu />
       </div>
 
-      {/* ✅ Mobile Nav */}
+
+      {/* Mobile Nav */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white px-4 pb-4 space-y-2">
           {categories.map((cat, index) => (
@@ -146,15 +143,15 @@ const Header = () => {
           ))}
         </div>
       )}
-            <MiniCart
+      <MiniCart
         isOpen={isMiniCartOpen}
         onClose={() => setMiniCartOpen(false)}
         items={cartItems}
-        total={totalPrice} 
-        updateCartItem={updateCartItem} 
-        removeCartItem={removeCartItem} 
+        total={totalPrice}
+        updateCartItem={updateCartItem}
+        removeCartItem={removeCartItem}
         loadingProductId={loadingProductId}
-        />
+      />
     </header>
   );
 };

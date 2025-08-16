@@ -148,7 +148,7 @@ const HomePage = ({ products = [] }: HomePageProps) => {
       </section>
 
 
-      {/* ✅ Top Categories */}
+      {/*  Top Categories */}
       <section className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
@@ -182,7 +182,7 @@ const HomePage = ({ products = [] }: HomePageProps) => {
         </div>
       </section>
 
-      {/* ✅ Brand Carousel */}
+      {/*  Brand Carousel */}
       <section className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
@@ -208,7 +208,7 @@ const HomePage = ({ products = [] }: HomePageProps) => {
         </div>
       </section>
 
-      {/* ✅ Daily Essentials */}
+      {/*  Daily Essentials */}
       <section className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
