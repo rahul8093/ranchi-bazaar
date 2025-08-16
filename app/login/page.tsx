@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FaGoogle, FaApple } from 'react-icons/fa';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function SignInPage() {
     const router = useRouter();
@@ -28,12 +29,14 @@ export default function SignInPage() {
 
             if (!res.ok) {
                 setError(data?.error || 'Invalid credentials');
+                toast.error(error);
                 return;
             }
 
             router.push('/');
         } catch (err) {
             console.error("Login failed:", err);
+            toast.error(error);
         } finally {
             setLoading(false);
         }
@@ -44,7 +47,7 @@ export default function SignInPage() {
             <div className="w-full text-black max-w-md border border-green-500 rounded-lg shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
 
-                {/* {error && <p className="text-red-500 text-center mb-3">{error}</p>} */}
+                {error && <p className="text-red-500 text-center mb-3">{error}</p>}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
