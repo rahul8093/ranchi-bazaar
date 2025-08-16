@@ -10,11 +10,18 @@ import UserLogo from './Logo/UserLogo';
 import SearchIcon from './Logo/SearchIcon';
 import ListIcon from './Logo/ListIcon';
 import { useCurrentUser } from '@/app/hooks/useCurrentUser';
+import { useCart } from '@/app/context/CartContext';
+import MiniCart from './MiniCart';
+// import { useCart } from '@/app/hooks/useCart';
+
 
 const Header = () => {
+  const { cartCount,cartItems,totalPrice,updateCartItem,removeCartItem } = useCart();
+  const [isMiniCartOpen, setMiniCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, loading } = useCurrentUser();
+  // const total = 989
 
   const categories = [
     'Groceries',
@@ -75,33 +82,33 @@ const Header = () => {
           {/* User */}
           {/* User */}
           {loading ? (
-  <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
-    <UserLogo />
-    Loading...
-  </span>
-) : user ? (
-  // User is logged in — no login link, just greeting
-  <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
-    <UserLogo />
-    Hello, {user.firstName || user.email}
-  </span>
-) : (
-  // No user — show login link
-  <Link href="/login" className="flex items-center gap-2 text-sm text-gray-700">
-    <UserLogo />
-    Sign in
-  </Link>
-)}
+            <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
+              <UserLogo />
+              Loading...
+            </span>
+          ) : user ? (
+            // User is logged in — no login link, just greeting
+            <span className="flex items-center gap-2 text-sm text-gray-700 cursor-default">
+              <UserLogo />
+              Hello, {user.firstName || user.email}
+            </span>
+          ) : (
+            // No user — show login link
+            <Link href="/login" className="flex items-center gap-2 text-sm text-gray-700">
+              <UserLogo />
+              Sign in
+            </Link>
+          )}
 
 
           {/* Cart */}
-          <Link href="/cart" className="flex items-center gap-2 relative text-gray-700 hover:text-black">
+          <button onClick={() =>setMiniCartOpen(true)} className="flex items-center gap-2 relative text-gray-700 hover:text-black">
             <FiShoppingCart size={22} />
             <span className="text-sm">Cart</span>
             <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-              3
+              {cartCount}
             </span>
-          </Link>
+          </button>
 
           {/* Mobile Menu Toggle */}
           <button
@@ -139,6 +146,14 @@ const Header = () => {
           ))}
         </div>
       )}
+            <MiniCart
+        isOpen={isMiniCartOpen}
+        onClose={() => setMiniCartOpen(false)}
+        items={cartItems}
+        total={totalPrice} 
+        updateCartItem={updateCartItem} 
+        removeCartItem={removeCartItem} 
+        />
     </header>
   );
 };

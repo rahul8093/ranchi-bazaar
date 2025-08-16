@@ -4,9 +4,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import HeroBannerCarousel from '@/components/HeroBannerCarousel';
-import { useAddToCart } from '../hooks/useCart';
+// import { useCart } from '../hooks/useCart';
 import Spinner from '@/components/Spinner';
 import { Product } from '../lib/saleor/queries/fetchProducts';
+import { useCart } from '../context/CartContext';
 
 
 // interface Product {
@@ -22,7 +23,9 @@ interface HomePageProps {
 }
 
 const HomePage = ({ products = [] }: HomePageProps) => {
-  const { addToCart, loadingProductId } = useAddToCart();
+  const { addToCart, loadingProductId } = useCart();
+
+
   return (
     <div className="w-full">
       <HeroBannerCarousel products={products} />

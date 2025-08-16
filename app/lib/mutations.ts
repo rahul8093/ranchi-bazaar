@@ -115,3 +115,78 @@ export const CHECKOUT_CUSTOMER_ATTACH_MUTATION = gql`
   }
 `;
 
+
+export const UPDATE_CHECKOUT_LINE_MUTATION = gql`
+  mutation CheckoutLinesUpdate($token: UUID!, $lines: [CheckoutLineUpdateInput!]!) {
+    checkoutLinesUpdate(token: $token, lines: $lines) {
+      checkout {
+        id
+        token
+        lines {
+          id
+          quantity
+          variant {
+            id
+            name
+            pricing {
+              price {
+                gross {
+                  amount
+                }
+              }
+            }
+            product {
+              name
+              thumbnail {
+                url
+                alt
+              }
+            }
+          }
+        }
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+
+export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
+  mutation CheckoutLineDelete($token: UUID!, $lineId: ID!) {
+    checkoutLineDelete(token: $token, lineId: $lineId) {
+      checkout {
+        id
+        token
+        lines {
+          id
+          quantity
+          variant {
+            id
+            name
+            pricing {
+              price {
+                gross {
+                  amount
+                }
+              }
+            }
+            product {
+              name
+              thumbnail {
+                url
+                alt
+              }
+            }
+          }
+        }
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
