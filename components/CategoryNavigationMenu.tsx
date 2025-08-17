@@ -1,5 +1,7 @@
-"use client"
+"use client";
 
+import { getMenuItems } from "@/app/lib/saleor/helpers/getMenu";
+import { MenuItem, MenuChild } from "@/app/lib/saleor/types/menu";
 import {
     NavigationMenu,
     NavigationMenuList,
@@ -7,50 +9,48 @@ import {
     NavigationMenuTrigger,
     NavigationMenuContent,
     NavigationMenuLink,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 
-const categories = [
-    'Groceries',
-    'Premium Fruits',
-    'Home & Kitchen',
-    'Fashion',
-    'Electronics',
-    'Beauty',
-    'Home Improvement',
-    'Sports, Toys & Luggage',
-]
-
-const dummyLinks = [
-    { name: "Best Sellers", href: "#" },
-    { name: "New Arrivals", href: "#" },
-    { name: "Top Rated", href: "#" },
-    { name: "On Sale", href: "#" },
-]
+import { useEffect, useState } from "react";
 
 export function CategoryNavigationMenu() {
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
+    useEffect(() => {
+        async function fetchMenu() {
+            const menu = await getMenuItems();
+            if (menu?.items) {
+                setMenuItems(menu.items);
+            }
+        }
+        fetchMenu();
+    }, []);
+
     return (
         <NavigationMenu viewport={false} className="bg-white border-t shadow-sm py-2 px-4 scrollbar-hide">
             <NavigationMenuList>
-                {categories.map((category) => (
-                    <NavigationMenuItem key={category}>
-                        <NavigationMenuTrigger>{category}</NavigationMenuTrigger>
-                        <NavigationMenuContent className="z-50 absolute w-max">
-                            <ul className="grid gap-4">
-                                {dummyLinks.map((link) => (
-                                    <li key={link.name} className="row-span-3">
-                                        <NavigationMenuLink
-                                            href={link.href}
-                                            className="hover:bg-muted transition-colors block px-2 py-1 rounded"
-                                        >
-                                            {link.name} in {category}
-                                        </NavigationMenuLink>
-                                    </li>
-                                ))}
-                            </ul>
-                        </NavigationMenuContent>
+                {menuItems.map((item) => (
+                    <NavigationMenuItem key={item.id}>
+                        <NavigationMenuTrigger>{item.name}</NavigationMenuTrigger>
+                        {item.children.length > 0 && (
+                            <NavigationMenuContent className="z-50 absolute w-max">
+                                <ul className="grid gap-2 p-2">
+                                    {item.children.map((child: MenuChild) => (
+                                        <li key={child.id}>
+                                            <NavigationMenuLink
+                                                href="#"
+                                                className="hover:bg-muted transition-colors block px-2 py-1 rounded"
+                                            >
+                                                {child.name}
+                                            </NavigationMenuLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </NavigationMenuContent>
+                        )}
                     </NavigationMenuItem>
                 ))}
             </NavigationMenuList>
         </NavigationMenu>
-    )
+    );
 }
