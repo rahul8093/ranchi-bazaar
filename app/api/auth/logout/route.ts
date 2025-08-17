@@ -1,7 +1,10 @@
+import { getServerAuthClient } from "@/app/lib/saleor/authClient";
 import { NextResponse } from "next/server";
-import { clearAuthToken } from "@/app/lib/saleor/helpers/cookies.server";
 
 export async function POST() {
-  clearAuthToken();
+  const authClient = await getServerAuthClient();
+
+  authClient.signOut();
+
   return NextResponse.json({ ok: true });
 }

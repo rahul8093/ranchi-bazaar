@@ -5,10 +5,11 @@ import { ChevronDown } from 'lucide-react'
 import { useCurrentUser } from '@/app/hooks/useCurrentUser';
 import UserLogo from './Logo/UserLogo';
 import { useRouter } from "next/navigation";
+import { BiLogOutCircle } from "react-icons/bi";
 
 
 export default function UserDropdown() {
-    const { user } = useCurrentUser();
+    const { user, logout,loading } = useCurrentUser();
     const [isOpen, setIsOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
     const isSignIn = user?.email || user?.firstName
@@ -38,6 +39,11 @@ export default function UserDropdown() {
         }
     };
 
+    // const handleLogOut = () => {
+    //     logout()
+        
+    // }
+
     return (
         <div className="relative inline-block text-left" ref={dropdownRef}>
             <button
@@ -56,31 +62,37 @@ export default function UserDropdown() {
 
             {/* Dropdown menu */}
             {
-                isOpen && (
+                (isOpen && isSignIn) && (
                     <div className="absolute right-0 z-50 mt-2 w-44 rounded-lg shadow-sm bg-white dark:bg-gray-700 divide-y divide-gray-100 dark:divide-gray-600">
                         <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                             <div className="font-medium">{user?.firstName}</div>
                             <div className="truncate">{user?.email}</div>
                         </div>
+
                         <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                             <li>
-                                <a
-                                    href="#"
-                                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                <button
+                                    type="button"
+                                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white "
+                                    onClick={() => console.log("Settings clicked")} // Replace with your handler
                                 >
                                     Settings
-                                </a>
+                                </button>
                             </li>
                         </ul>
+
                         <div className="py-2">
-                            <a
-                                href="#"
-                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            <button
+                                type="button"
+                                onClick={logout}
+                                className="flex items-center justify-start gap-1 block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
+                            <BiLogOutCircle className={`${loading?'animate-spin':''}`}/>
                                 Sign out
-                            </a>
+                            </button>
                         </div>
                     </div>
+
                 )
             }
         </div >
