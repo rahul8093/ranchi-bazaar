@@ -38,7 +38,8 @@ export function CategoryNavigationMenu() {
                                     {item.children.map((child: MenuChild) => (
                                         <li key={child.id}>
                                             <NavigationMenuLink
-                                                href="#"
+                                            href={item.category?.slug ? `/category/${item.category.slug}` : "#"}
+
                                                 className="hover:bg-muted transition-colors block px-2 py-1 rounded"
                                             >
                                                 {child.name}
