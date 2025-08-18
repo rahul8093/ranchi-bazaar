@@ -33,6 +33,12 @@ export interface GetProductsByCategoryResponse {
   products: {
     edges: {
       node: Product;
+      cursor: string;
     }[];
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
   };
 }
+
