@@ -75,7 +75,7 @@ const Header = () => {
           <input
             type="text"
             placeholder="Search essentials, groceries and more..."
-            className="w-full text-black pl-8 pr-8 py-2 border rounded-md text-sm shadow-md-rb focus-visible:border-green-500"
+            className="rounded-x1 shadow-md w-full text-black pl-8 pr-8 py-2 border rounded-md text-sm shadow-md-rb focus-visible:border-green-500"
           />
         </div>
 
@@ -95,7 +95,7 @@ const Header = () => {
 
 
           {/* Cart */}
-          <button onClick={() => setMiniCartOpen(true)} className="flex items-center gap-2 relative text-gray-700 hover:text-black">
+          <button onClick={() => setMiniCartOpen(true)} className="flex hover:scale-110 items-center gap-2 relative text-gray-700 hover:text-black">
             <FiShoppingCart size={22} />
             <span className="text-sm">Cart</span>
             <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
