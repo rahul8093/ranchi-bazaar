@@ -10,10 +10,14 @@ import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SkeletonCardGroup } from '@/components/SkeletorCard';
 import HomepageHero from '@/components/HomePageHero';
+import { Rabbit } from 'lucide-react';
+import { FaApple } from "react-icons/fa";
+import { SiXiaomi } from "react-icons/si";
+import { AiFillTrademarkCircle } from "react-icons/ai";
 
 
 const HomePage = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,18 +35,23 @@ const HomePage = () => {
     fetchData();
   }, []);
   const { addToCart, loadingProductId, cartItems, updateCartItem } = useCart();
+  const brands = [
+    { brand: 'Apple', bg: 'bg-white', img: FaApple },
+    { brand: 'Realme', bg: 'bg-yellow-100', img: SiXiaomi },
+    { brand: 'Xiaomi', bg: 'bg-orange-100', img: SiXiaomi },
+  ];
 
-    if (loading) {
+  if (loading) {
     return (
-    <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-6'>
-      <SkeletonCardGroup count={6}/>
+      <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-6'>
+        <SkeletonCardGroup count={6} />
 
-    </div>)
+      </div>)
   }
 
   return (
     <div className="w-full">
-      <HomepageHero products={products}/>
+      <HomepageHero products={products} />
       <section className="md:container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
@@ -69,7 +78,7 @@ const HomePage = () => {
             return (
               <div
                 key={product.id}
-                className={`${loading?'animate-pulse':""} min-w-[160px] border p-3 rounded shadow hover:shadow-md relative flex flex-col`}
+                className={`${loading ? 'animate-pulse' : ""} min-w-[160px] border p-3 rounded shadow hover:shadow-md relative flex flex-col justify-between`}
               >
                 {/* Discount badge */}
                 <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
@@ -89,7 +98,7 @@ const HomePage = () => {
                 </div>
 
                 {/* Product Name */}
-                <h3 className="text-sm font-medium text-black">{product.name}</h3>
+                <h3 className="text-sm font-medium text-black md:w-36">{product.name}</h3>
 
                 {/* Prices */}
                 <p className="text-xs line-through text-gray-400">₹{oldPrice}</p>
@@ -97,7 +106,7 @@ const HomePage = () => {
                 <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
 
                 {/* Button */}
-  
+
                 <div >
                   <div className="mt-auto">
                     {loading ? (
@@ -171,12 +180,7 @@ const HomePage = () => {
           ].map((cat, i) => (
             <div key={i} className="flex flex-col items-center">
               <div className="w-16 h-16 rounded-full bg-gray-100 shadow-md flex items-center justify-center mb-2">
-                <Image
-                  src={`/icons/${cat.toLowerCase()}.png`} // example image path
-                  alt={cat}
-                  width={40}
-                  height={40}
-                />
+                <AiFillTrademarkCircle />
               </div>
               <span className="text-xs">{cat}</span>
             </div>
@@ -193,20 +197,19 @@ const HomePage = () => {
           <Link href="/brands" className="text-sm text-gray-600">View All →</Link>
         </div>
 
-        <div className="flex overflow-x-auto gap-4 scrollbar-hide">
-          {[
-            { brand: 'Apple', bg: 'bg-gray-800', img: '/phones/apple.png' },
-            { brand: 'Realme', bg: 'bg-yellow-100', img: '/phones/realme.png' },
-            { brand: 'Xiaomi', bg: 'bg-orange-100', img: '/phones/xiaomi.png' },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className={`min-w-[250px] rounded-xl p-4 text-white shadow-md flex items-center gap-4 ${item.bg}`}
-            >
-              <div className="text-lg font-bold">{item.brand}</div>
-              <Image src={item.img} alt={item.brand} width={100} height={100} />
-            </div>
-          ))}
+        <div className="flex overflow-x-auto gap-4 scrollbar-hide p-4">
+          {brands.map((item, i) => {
+            const Icon = item.img; // Assign the icon component
+            return (
+              <div
+                key={i}
+                className={`min-w-[250px] rounded-xl p-4 shadow-md flex items-center gap-4 ${item.bg}`}
+              >
+                <Icon className="text-3xl text-black" />
+                <div className="text-lg font-bold text-black">{item.brand}</div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -232,13 +235,14 @@ const HomePage = () => {
               key={i}
               className="min-w-[100px] text-center bg-white border p-2 rounded shadow hover:shadow-md"
             >
-              <Image
+              {/* <Image
                 src={`/essentials/${item.toLowerCase().replace(' ', '-')}.png`}
                 alt={item}
                 width={80}
                 height={80}
                 className="mx-auto mb-1"
-              />
+              /> */}
+              <Rabbit />
               <p className="text-xs font-medium">{item}</p>
               <p className="text-[10px] text-green-600">UP to 50% OFF</p>
             </div>
