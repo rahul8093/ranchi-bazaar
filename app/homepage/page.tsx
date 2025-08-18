@@ -108,15 +108,15 @@ const HomePage = () => {
                 {/* Button */}
 
                 <div >
-                  <div className="mt-auto">
+                  <div className="mt-auto text-sm w-16 absolute bottom-[-2%] right-[-6%] bg-white">
                     {loading ? (
                       <Button size="sm" disabled
                         className=' w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white cursor-not-allowed'>
                         <Loader2Icon className="animate-spin" />
-                        Please wait
+                        {/* Please wait */}
                       </Button>
                     ) : quantity > 0 ? (
-                      <div className="flex items-center justify-between border border-green-500 rounded ">
+                      <div className="flex items-center justify-between border border-green-500 rounded bg-white ">
                         <button
                           onClick={() => {
                             if (cartItem) {
