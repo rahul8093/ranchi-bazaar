@@ -3,13 +3,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import HeroBannerCarousel from '@/components/HeroBannerCarousel';
 import { fetchProducts, Product } from '../lib/saleor/queries/fetchProducts';
 import { useCart } from '../context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SkeletonCardGroup } from '@/components/SkeletorCard';
+import HomepageHero from '@/components/HomePageHero';
 
 
 const HomePage = () => {
@@ -42,8 +42,8 @@ const HomePage = () => {
 
   return (
     <div className="w-full">
-      <HeroBannerCarousel products={products} />
-      <section className="container mx-auto px-4 py-6">
+      <HomepageHero products={products}/>
+      <section className="md:container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
             Grab the best deal on <span className="text-green-600">Smartphones</span>
@@ -151,7 +151,7 @@ const HomePage = () => {
 
 
       {/*  Top Categories */}
-      <section className="container mx-auto px-4 py-6">
+      <section className="md:container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
             Shop from <span className="text-green-600">Top Categories</span>
@@ -185,7 +185,7 @@ const HomePage = () => {
       </section>
 
       {/*  Brand Carousel */}
-      <section className="container mx-auto px-4 py-6">
+      <section className="md:container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
             Top Electronics <span className="text-green-600">Brands</span>
@@ -211,7 +211,7 @@ const HomePage = () => {
       </section>
 
       {/*  Daily Essentials */}
-      <section className="container mx-auto px-4 py-6">
+      <section className="md:container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
             Daily <span className="text-green-600">Essentials</span>
