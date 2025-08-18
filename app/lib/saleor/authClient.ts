@@ -1,13 +1,11 @@
-// lib/saleor/authClient.ts
 import { createSaleorAuthClient } from "@saleor/auth-sdk";
-import { getNextServerCookiesStorage } from "@saleor/auth-sdk/next/server";
+import { getNextServerCookiesStorageAsync } from "@saleor/auth-sdk/next/server";
 
-export const getServerAuthClient = () => {
-  const cookieStorage = getNextServerCookiesStorage();
-
+export const getServerAuthClient = async () => {
+  const nextServerCookiesStorage = await getNextServerCookiesStorageAsync();
   return createSaleorAuthClient({
     saleorApiUrl: process.env.NEXT_PUBLIC_API_URI!,
-    refreshTokenStorage: cookieStorage,
-    accessTokenStorage: cookieStorage,
+    refreshTokenStorage: nextServerCookiesStorage,
+    accessTokenStorage: nextServerCookiesStorage,
   });
 };

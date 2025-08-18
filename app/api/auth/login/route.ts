@@ -1,55 +1,31 @@
+import { getServerAuthClient } from "@/app/lib/saleor/authClient";
 import { NextRequest, NextResponse } from "next/server";
-import { setAuthToken } from "@/app/lib/saleor/helpers/cookies.server";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URI!;
+// import { getServerAuthClient } from "@/app/lib/authClient";
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
+  try {
+    const { email, password } = await req.json();
 
-  const TOKEN_CREATE = `
-    mutation TokenCreate($email: String!, $password: String!) {
-      tokenCreate(email: $email, password: $password) {
-        token
-        refreshToken
-        errors { field message }
-      }
-    }
-  `;
+    const authClient = await getServerAuthClient();
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query: TOKEN_CREATE, variables: { email, password } }),
-    cache: "no-store",
-  });
+    // Call signIn to authenticate and get tokens
+    const { data } = await authClient.signIn({ email, password });
 
-  const json = await res.json();
+    // // Tokens are automatically stored in the storage repositories
+    // // e.g., cookies or localStorage
 
-  const { token, errors } = json?.data?.tokenCreate ?? {};
-  if (!token) {
-    return NextResponse.json(
-      { error: errors ?? [{ message: "Invalid credentials" }] },
-      { status: 400 }
-    );
+    // // Optionally, fetch the user's details after successful login
+    // const ME_QUERY = `query { me { id email firstName lastName } }`;
+    // const userResponse = await authClient.fetchWithAuth(ME_QUERY);
+    console.log(data,'login data')
+
+    return NextResponse.json({
+      // user: userResponse.status,
+      message: "Login successful",
+      data:data
+    });
+  } catch (error) {
+    console.error("Login Error:", error);
+    return NextResponse.json({ error: error}, { status: 400 });
   }
-
-  // Set httpOnly cookie
-  await setAuthToken(token);
-
-  // Fetch current user
-  const ME_QUERY = `query { me { id email firstName lastName } }`;
-  const meRes = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ query: ME_QUERY }),
-    cache: "no-store",
-  });
-  const meJson = await meRes.json();
-
-  return NextResponse.json({
-    user: meJson.data?.me ?? null,
-  });
 }
