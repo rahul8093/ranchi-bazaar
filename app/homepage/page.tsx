@@ -4,29 +4,41 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import HeroBannerCarousel from '@/components/HeroBannerCarousel';
-import { Product } from '../lib/saleor/queries/fetchProducts';
+import { fetchProducts, Product } from '../lib/saleor/queries/fetchProducts';
 import { useCart } from '../context/CartContext';
-import { CheckoutLine } from '../lib/saleor/queries/fetchCheckout';
 import { Button } from '@/components/ui/button';
 import { Loader2Icon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { SkeletonCardGroup } from '@/components/SkeletorCard';
 
-// interface Product {
-//   id: string;
-//   name: string;
-//   description: string;
-//   pricing: { priceRange: { start: { gross: { amount: number } } } };
-//   thumbnail: { url: string; alt: string };
-// }
 
-interface HomePageProps {
-  products?: Product[];
-  cartItems?: CheckoutLine[];
-  updateCartItem?: (lineId: string, quantity: number) => void;
-  removeCartItem?: (lineId: string) => void;
-}
+const HomePage = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const HomePage = ({ products = [] }: HomePageProps) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchProducts();
+        setProducts(result);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
   const { addToCart, loadingProductId, cartItems, updateCartItem } = useCart();
+
+    if (loading) {
+    return (
+    <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-6'>
+      <SkeletonCardGroup count={6}/>
+
+    </div>)
+  }
 
   return (
     <div className="w-full">
@@ -43,7 +55,7 @@ const HomePage = ({ products = [] }: HomePageProps) => {
 
         <div className="flex overflow-x-auto gap-4 scrollbar-hide">
           {products?.map((product) => {
-            const oldPrice = product.pricing.priceRange.start.gross.amount + 10000; // example old price
+            const oldPrice = product.pricing.priceRange.start.gross.amount + 10000;
             const newPrice = product.pricing.priceRange.start.gross.amount;
             const discountPercent = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
             const saveAmount = oldPrice - newPrice;
@@ -85,18 +97,8 @@ const HomePage = ({ products = [] }: HomePageProps) => {
                 <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
 
                 {/* Button */}
-                {/* <button
-                  onClick={() => addToCart(product.variants[0].id)}
-                  className="mt-auto w-full border cursor-pointer border-green-500 bg-white text-green-700 text-sm py-1 rounded hover:bg-green-50"
-                  disabled={loadingProductId === product.id}
-                >
-
-                  {loadingProductId === product.variants[0].id ? <Spinner /> : 'ADD'}
-
-                </button> */}
-
+  
                 <div >
-
                   <div className="mt-auto">
                     {loading ? (
                       <Button size="sm" disabled
@@ -248,4 +250,3 @@ const HomePage = ({ products = [] }: HomePageProps) => {
 };
 
 export default HomePage;
-
