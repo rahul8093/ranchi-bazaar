@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { Product } from '@/app/lib/saleor/queries/fetchProducts';
 import { parseSaleorDescription } from '@/app/lib/saleor/helpers/common';
 import { Card, CardContent } from "./ui/card";
+import { useMediaQuery } from '@react-hook/media-query'
 
 interface HomepageHeroProps {
     products: Product[];
@@ -24,6 +25,8 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
     const [api, setApi] = React.useState<CarouselApi | null>(null);
     const [current, setCurrent] = React.useState(0);
     const [count, setCount] = React.useState(0);
+    const isMobile = useMediaQuery('only screen and (max-width: 768px)');
+
 
     // Setup the carousel API
     React.useEffect(() => {
@@ -76,17 +79,28 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
                                                 <p className="uppercase text-sm opacity-80">
                                                     {parseSaleorDescription(product.description)}
                                                 </p>
-                                                <h2 className="text-4xl md:text-5xl font-bold">{product.name}</h2>
+                                                <h2 className="text-4xl md:text-5xl font-bold relative z-10">{product.name}</h2>
                                                 <p className="text-xl font-medium">
                                                     {product.pricing.priceRange.start.gross.amount}$
                                                 </p>
-                                                <button className="mt-4 bg-white text-black font-semibold px-6 py-2 rounded hover:bg-gray-200 transition">
-                                                    Shop Now
-                                                </button>
+
+                                                <div className="block">
+                                                    <button className="mt-4 bg-white text-black font-semibold px-6 py-2 rounded hover:bg-gray-200 transition">
+                                                        Shop Now
+                                                    </button>
+                                                    {isMobile && (<Image
+                                                        src={product.thumbnail.url}
+                                                        alt={product.thumbnail.alt}
+                                                        width={200}
+                                                        height={200}
+                                                        className=" animate-pulse object-cover text-transparent inline-block absolute bottom-[0%] right-[-5%]"
+                                                    />)}
+
+                                                </div>
                                             </div>
 
                                             {/* Right Image Section */}
-                                            <div className="h-[30%] md:h-auto md:w-1/2 flex justify-center md:justify-end">
+                                            {!isMobile && (<div className="h-[30%] md:h-auto md:w-1/2 flex justify-center md:justify-end">
                                                 <Image
                                                     src={product.thumbnail.url}
                                                     alt={product.thumbnail.alt}
@@ -94,7 +108,7 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
                                                     height={300}
                                                     className="object-cover"
                                                 />
-                                            </div>
+                                            </div>)}
 
                                         </div>
                                     </CardContent>
