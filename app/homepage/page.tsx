@@ -62,7 +62,7 @@ const HomePage = () => {
           </Link>
         </div>
 
-        <div className="flex overflow-x-auto gap-4 scrollbar-hide">
+        <div className="flex overflow-x-auto gap-4 scrollbar-hide pb-4">
           {products?.map((product) => {
             const oldPrice = product.pricing.priceRange.start.gross.amount + 10000;
             const newPrice = product.pricing.priceRange.start.gross.amount;
@@ -78,17 +78,17 @@ const HomePage = () => {
             return (
               <div
                 key={product.id}
-                className={`${loading ? 'animate-pulse' : ""} min-w-[160px] border p-3 rounded shadow hover:shadow-md relative flex flex-col justify-between`}
+                className={`${loading ? 'animate-pulse' : ""} min-w-[160px] border p-3 rounded-2xl shadow-md hover:shadow-md relative flex flex-col justify-between`}
               >
                 {/* Discount badge */}
-                <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
+                <div className="absolute shadow-sm rounded-lg top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
                   {discountPercent}% OFF
                 </div>
 
 
 
                 {/* Image */}
-                <div className="relative w-full h-44 mb-2 bg-gray-100">
+                <div className="relative w-full h-44 mb-2 bg-gray-100 rounded-2xl shadow-sm">
                   <Image
                     src={product.thumbnail.url}
                     alt={product.thumbnail.alt || product.name}
@@ -111,12 +111,12 @@ const HomePage = () => {
                   <div className="mt-auto">
                     {loading ? (
                       <Button size="sm" disabled
-                        className='mt-2 w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white cursor-not-allowed'>
+                        className=' w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white cursor-not-allowed'>
                         <Loader2Icon className="animate-spin" />
                         Please wait
                       </Button>
                     ) : quantity > 0 ? (
-                      <div className="flex items-center justify-between border border-green-500 rounded mt-2">
+                      <div className="flex items-center justify-between border border-green-500 rounded ">
                         <button
                           onClick={() => {
                             if (cartItem) {
@@ -143,7 +143,7 @@ const HomePage = () => {
                     ) : (
                       <button
                         onClick={() => addToCart(product.variants[0].id)}
-                        className="mt-2 w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white hover:bg-green-50"
+                        className=" w-full border border-green-500 text-green-700 py-1 rounded bg-white hover:bg-green-50"
                       >
                         ADD
                       </button>

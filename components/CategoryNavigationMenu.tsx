@@ -34,7 +34,7 @@ export function CategoryNavigationMenu() {
             <NavigationMenuList>
                 {menuItems.map((item) => (
                     <NavigationMenuItem key={item.id}>
-                        <NavigationMenuTrigger>{item.name}</NavigationMenuTrigger>
+                        <NavigationMenuTrigger className="rounded-x1 shadow-md">{item.name}</NavigationMenuTrigger>
                         {item.children.length > 0 && (
                             <NavigationMenuContent className="z-50 absolute w-max">
                                 <ul className="grid gap-2 p-2">
