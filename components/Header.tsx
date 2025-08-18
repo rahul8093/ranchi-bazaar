@@ -12,7 +12,7 @@ import ListIcon from './Logo/ListIcon';
 import { useCurrentUser } from '@/app/hooks/useCurrentUser';
 import { useCart } from '@/app/context/CartContext';
 import MiniCart from './MiniCart';
-import { CategoryNavigationMenu } from './CategoryNavigationMenu';
+import { CategoryNavigationMenu, MobileCategoryNavigationMenu } from './CategoryNavigationMenu';
 import UserDropdown from './UserDropdown';
 // import { useCart } from '@/app/hooks/useCart';
 
@@ -25,19 +25,19 @@ const Header = () => {
   const { loading } = useCurrentUser();
   // const total = 989
 
-  const categories = [
-    'Groceries',
-    'Premium Fruits',
-    'Home & Kitchen',
-    'Fashion',
-    'Electronics',
-    'Beauty',
-    'Home Improvement',
-    'Sports, Toys & Luggage',
-  ];
+  // const categories = [
+  //   'Groceries',
+  //   'Premium Fruits',
+  //   'Home & Kitchen',
+  //   'Fashion',
+  //   'Electronics',
+  //   'Beauty',
+  //   'Home Improvement',
+  //   'Sports, Toys & Luggage',
+  // ];
 
   return (
-    <header className="w-full mb-8">
+    <header className="w-full md:mb-8">
       {/* ✅ Top Bar */}
       <div className="bg-[#3b487f] text-white text-sm py-2 px-4 flex justify-between items-center">
         <span>Welcome to Ranchi Bazaar</span>
@@ -136,11 +136,12 @@ const Header = () => {
       {/* Mobile Nav */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white px-4 pb-4 space-y-2">
-          {categories.map((cat, index) => (
+          {/* {categories.map((cat, index) => (
             <Link href="/" key={index} className="block text-gray-700">
               {cat}
             </Link>
-          ))}
+          ))} */}
+          <MobileCategoryNavigationMenu/>
         </div>
       )}
       <MiniCart
