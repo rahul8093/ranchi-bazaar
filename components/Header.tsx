@@ -54,7 +54,7 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="w-10 h-10 bg-white rounded-lg shadow flex items-center justify-center hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]"
+            className="hidden md:flex w-10 h-10 bg-white rounded-lg shadow flex items-center justify-center hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]"
           >
             <HamburgerIcon />
           </button>
