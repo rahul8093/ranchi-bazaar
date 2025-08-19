@@ -15,6 +15,7 @@ import { Product } from '@/app/lib/saleor/queries/fetchProducts';
 import { parseSaleorDescription } from '@/app/lib/saleor/helpers/common';
 import { Card, CardContent } from "./ui/card";
 import { useMediaQuery } from '@react-hook/media-query'
+import Link from "next/link";
 
 interface HomepageHeroProps {
     products: Product[];
@@ -85,9 +86,11 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
                                                 </p>
 
                                                 <div className="block">
-                                                    <button className="mt-4 bg-white text-black font-semibold px-6 py-2 rounded hover:bg-gray-200 transition">
-                                                        Shop Now
-                                                    </button>
+                                                    <Link href={`/product/${product?.slug}`}>
+                                                        <button className="mt-4 bg-white text-black font-semibold px-6 py-2 rounded hover:bg-gray-200 transition">
+                                                            Shop Now
+                                                        </button>
+                                                    </Link>
                                                     {isMobile && (<Image
                                                         src={product.thumbnail.url}
                                                         alt={product.thumbnail.alt}
