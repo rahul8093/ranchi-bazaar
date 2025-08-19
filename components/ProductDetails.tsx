@@ -37,7 +37,7 @@ export default function ProductDetails({ product }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {/* Product Image + Thumbnails */}
                 <div>
-                    <div className="group relative overflow-hidden border w-full h-[600px]">
+                    <div className="group relative overflow-hidden border w-full h-[300px] md:h-[600px]">
                         <Image
                             src={selectedImage || "/placeholder.jpg"}
                             alt={product.name}

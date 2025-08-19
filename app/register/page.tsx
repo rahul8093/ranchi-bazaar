@@ -59,7 +59,7 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 bg-white">
+        <div className="py-4 flex items-center justify-center px-4 bg-white">
             <div className="w-full text-black max-w-md border border-green-500 rounded-lg shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-center mb-6">Get Started Now</h2>
 

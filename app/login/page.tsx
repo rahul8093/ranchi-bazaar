@@ -48,7 +48,7 @@ export default function SignInPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="py-4 flex items-center justify-center bg-white px-4">
             <div className="w-full text-black max-w-md border border-green-500 rounded-lg shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
 
