@@ -7,7 +7,7 @@ import { parseSaleorDescription } from "@/app/lib/saleor/helpers/common";
 import { useCart } from "@/app/context/CartContext";
 import { Loader2Icon } from "lucide-react";
 import { BsCartPlus } from "react-icons/bs";
-import { SideBySideMagnifier } from 'react-image-magnifiers'
+// import { SideBySideMagnifier } from 'react-image-magnifiers'
 
 
 interface Props {
@@ -37,54 +37,32 @@ export default function ProductDetails({ product }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {/* Product Image + Thumbnails */}
                 <div>
-                    {/* <GlassMagnifier
-                        imageSrc={selectedImage || "/placeholder.jpg"}
-                        imageAlt={product.name}
-                        largeImageSrc={selectedImage || "/placeholder.jpg"} // Optional: higher-res image if available
-                        magnifierSize="70%" // Can be px or %
-                        magnifierBorderSize={0}
-                        magnifierBorderColor="rgba(255,255,255,0.6)"
-                        magnifierBackgroundColor="rgba(0,0,0,0.2)"
-                        cursorStyle="zoom-in"
-                        className="w-full h-auto object-contain border rounded react-magnifier"
-                        // magnifierClassName="custom-magnifier"
-                        square={true}
-                        mouseActivation="click"
-                        
-                    /> */}
-                    {/* <Magnifier
-  imageSrc={selectedImage || "/placeholder.jpg"}
-  imageAlt={product.name}
-  largeImageSrc={selectedImage || "/placeholder.jpg"}
-  cursorStyle="zoom-in"
-  cursorStyleActive="move"
-  dragToMove={true}
-  mouseActivation="click"
-  className="rounded react-magnifier"
-  style={{
-    width: "100%",
-    maxWidth: 600,
-    border: "1px solid #ddd",
-  }}
-/> */}
+                    <div className="group relative overflow-hidden border w-full h-[600px]">
+                        <Image
+                            src={selectedImage || "/placeholder.jpg"}
+                            alt={product.name}
+                            fill
+                            className="object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+                    </div>
 
-<SideBySideMagnifier
-  imageSrc={selectedImage || "/placeholder.jpg"}
-  largeImageSrc={selectedImage || "/placeholder.jpg"}
-  imageAlt={product.name}
-  className="rounded border react-magnifier "
-  zoomContainerBorder="1px solid #ccc"
-  zoomContainerBoxShadow="0 4px 16px rgba(0, 0, 0, 0.15)"
-  overlayOpacity={0.5}
-  overlayBoxOpacity={0.3}
-  alwaysInPlace={false}
-  fillAvailableSpace={false}
-  switchSides={false} // Change to true if you want zoom on the left side
-  style={{
-    width: "100%",
-    maxWidth: 600,
-  }}
-/>
+                    {/* <SideBySideMagnifier
+                        imageSrc={selectedImage || "/placeholder.jpg"}
+                        largeImageSrc={selectedImage || "/placeholder.jpg"}
+                        imageAlt={product.name}
+                        className="rounded border react-magnifier "
+                        zoomContainerBorder="1px solid #ccc"
+                        zoomContainerBoxShadow="0 4px 16px rgba(0, 0, 0, 0.15)"
+                        overlayOpacity={0.5}
+                        overlayBoxOpacity={0.3}
+                        alwaysInPlace={false}
+                        fillAvailableSpace={false}
+                        switchSides={false}
+                        style={{
+                            width: "100%",
+                            maxWidth: 600,
+                        }}
+                    /> */}
 
 
                     <div className="flex gap-2 mt-4">
