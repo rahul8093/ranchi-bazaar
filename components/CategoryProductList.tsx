@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { SkeletonCardGroup } from "./SkeletorCard";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface Product {
     id: string;
@@ -62,7 +63,8 @@ export function CategoryProductList({ categoryId }: Props) {
 
             <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
                 {products.map((product) => (
-                    <div key={product.id} className="border p-4 rounded bg-white">
+                    <Link href={`/product/${product?.slug}`} key={product.id}>
+                         <div key={product.id} className="border p-4 rounded bg-white">
                         {product.thumbnail?.url && (
                             <Image
                                 src={product.thumbnail.url}
@@ -80,6 +82,7 @@ export function CategoryProductList({ categoryId }: Props) {
                             </p>
                         )}
                     </div>
+                    </Link>                 
                 ))}
                 {loading && (<SkeletonCardGroup count={5} />)}
             </section>
