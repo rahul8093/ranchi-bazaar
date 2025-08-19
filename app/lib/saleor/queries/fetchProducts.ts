@@ -12,6 +12,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  slug:string;
   pricing: { priceRange:{start:{gross:{amount:number}}} }
   thumbnail: {
     url: string;
@@ -30,12 +31,13 @@ interface ProductsData {
 
 const GET_PRODUCTS = gql`
   query GetProducts {
-    products(first: 6, channel: "default-channel") {
+    products(first: 10, channel: "default-channel") {
       edges {
         node {
           id
           name
           description
+          slug
           pricing {
             priceRange {
               start {

@@ -78,7 +78,7 @@ const HomePage = () => {
             return (
               <div
                 key={product.id}
-                className={`${loading ? 'animate-pulse' : ""} min-w-[160px] border p-3 rounded-2xl shadow-md hover:shadow-md relative flex flex-col justify-between`}
+                className={`${loading ? 'animate-pulse' : ""}hover:border-green-500 min-w-[160px] border rounded-2xl shadow-md hover:shadow-md relative flex flex-col justify-between`}
               >
                 {/* Discount badge */}
                 <div className="absolute shadow-sm rounded-lg top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
@@ -88,25 +88,30 @@ const HomePage = () => {
 
 
                 {/* Image */}
-                <div className="relative w-full h-44 mb-2 bg-gray-100 rounded-2xl shadow-sm">
-                  <Image
-                    src={product.thumbnail.url}
-                    alt={product.thumbnail.alt || product.name}
-                    fill
-                    className="object-contain"
-                  />
+                <Link href={`/product/${product.slug}`}>
+                  <div className="relative w-full h-44 mb-2 bg-gray-100 rounded-2xl shadow-sm">
+                    <Image
+                      src={product.thumbnail.url}
+                      alt={product.thumbnail.alt || product.name}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </Link>
+
+                <div className='px-4 pb-4'>
+                  {/* Product Name */}
+                  <Link href={`/product/${product.slug}`}>
+                    <h3 className="text-sm font-medium text-black md:w-36">{product.name}</h3>
+                  </Link>
+
+                  {/* Prices */}
+                  <p className="text-xs line-through text-gray-400">₹{oldPrice}</p>
+                  <p className="text-green-600 font-semibold text-sm">₹{newPrice}</p>
+                  <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
                 </div>
 
-                {/* Product Name */}
-                <h3 className="text-sm font-medium text-black md:w-36">{product.name}</h3>
-
-                {/* Prices */}
-                <p className="text-xs line-through text-gray-400">₹{oldPrice}</p>
-                <p className="text-green-600 font-semibold text-sm">₹{newPrice}</p>
-                <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
-
                 {/* Button */}
-
                 <div >
                   <div className="mt-auto text-sm w-16 absolute bottom-[-2%] right-[-6%] bg-white">
                     {loading ? (

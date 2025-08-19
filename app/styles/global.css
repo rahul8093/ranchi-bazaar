@@ -24,9 +24,6 @@ body{
     align-items: flex-start;
 }
 
-.theme-gradient {
-    background: linear-gradient(to bottom, #2C3454 10%, #83CA95 100%);
-  }
 
 /* .shadow-md-rb {
     @apply focus:outline-none focus:ring focus:border-green-400
