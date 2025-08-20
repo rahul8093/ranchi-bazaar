@@ -8,7 +8,7 @@ import { useCart } from '../context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { SkeletonCardGroup } from '@/components/SkeletorCard';
+import { HomePageSkeleton } from '@/components/SkeletorCard';
 import HomepageHero from '@/components/HomePageHero';
 import { Rabbit } from 'lucide-react';
 import { FaApple } from "react-icons/fa";
@@ -43,10 +43,8 @@ const HomePage = () => {
 
   if (loading) {
     return (
-      <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-6'>
-        <SkeletonCardGroup count={6} />
-
-      </div>)
+        <HomePageSkeleton/>
+      )
   }
 
   return (

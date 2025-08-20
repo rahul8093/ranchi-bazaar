@@ -1,14 +1,14 @@
 'use client';
 
-// import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import Image from 'next/image';
 import { IoIosArrowRoundBack } from "react-icons/io";
-// import { Button } from '@/components/ui/button';
 import { CircleMinus, CirclePlus, Loader2Icon, Trash2 } from 'lucide-react';
-// import { useState } from 'react';
 import MobileCartSummaryBar from '@/components/MobileCartSummaryBar';
+import { useEffect, useState } from 'react';
+import { CartPageSkeleton } from '@/components/SkeletorCard';
+// import CartPageSkeleton from '@/components/SkeletorCard';
 
 export default function CartPage() {
   const {
@@ -18,16 +18,26 @@ export default function CartPage() {
     loadingProductId,
     totalPrice,
     cartCount,
+    cartLoading
   } = useCart();
 
-  // Optional mock values for summary
-  // const estimatedTax = 220.74;
-  // const delivery = 'FREE';
-  // const discount = 1450.0;
-  // const orderTotal = totalPrice + estimatedTax;
-  // const [isOpen, setIsOpen] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
 
-  if (cartCount === 0) {
+  useEffect(() => {
+    if (!cartLoading) {
+      setFirstLoad(false);
+    }
+  }, [cartLoading]);
+
+
+  if (cartLoading && firstLoad) {
+    return (
+      <CartPageSkeleton />
+    );
+  }
+
+
+  if (cartCount === 0 && cartItems.length < 1) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6">
         <h1 className="text-2xl font-semibold mb-4">Your cart is empty</h1>
@@ -67,7 +77,7 @@ export default function CartPage() {
                   <p className="text-sm text-gray-500"><span>SKU: </span>{item.variant.id}</p>
                   <p className="text-sm text-gray-500"><span>Quantity: </span>{item.quantity}</p>
                 </div>
-                <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center justify-between mt-2 items-end">
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-gray-600">
@@ -148,7 +158,7 @@ export default function CartPage() {
         </div>
 
         <button
-          className="w-full bg-green-600 font-medium hover:bg-green-700 text-white py-2 rounded py-3 mt-6 flex items-center justify-center gap-2"
+          className="w-full bg-green-600 font-medium hover:bg-green-700 text-white py-2 rounded-full py-3 mt-6 flex items-center justify-center gap-2"
         >
           Go to Checkout
         </button>

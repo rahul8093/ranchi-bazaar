@@ -24,8 +24,9 @@ interface CartContextType {
     cartItems: CheckoutLine[];
     refreshCart: () => void;
     totalPrice: number;
- updateCartItem: (lineId: string, quantity: number) => Promise<void>;
-  removeCartItem: (lineId: string) => Promise<void>;
+    updateCartItem: (lineId: string, quantity: number) => Promise<void>;
+    removeCartItem: (lineId: string) => Promise<void>;
+    cartLoading:boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -35,9 +36,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const [cartCount, setCartCount] = useState<number>(0);
     const [cartItems, setCartItems] = useState<CheckoutLine[]>([]);
     const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [cartLoading, setCartLoading] = useState<boolean>(true)
 
 
     const fetchCheckout = async () => {
+        setCartLoading(true)
         const checkoutToken = getCheckoutToken();
         if (!checkoutToken) return;
 
@@ -53,7 +56,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
             setCartItems(lines);
             setCartCount(totalQty);
-            setTotalPrice(price)
+            setTotalPrice(price);
+            setCartLoading(false)
         } catch (err) {
             console.error('Failed to fetch checkout:', err);
         }
@@ -142,6 +146,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 cartItems,
                 totalPrice,
                 refreshCart: fetchCheckout,
+                cartLoading
             }}
         >
             {children}
