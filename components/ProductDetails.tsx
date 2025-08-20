@@ -95,7 +95,7 @@ export default function ProductDetails({ product }: Props) {
                     {/* Variant selection */}
                     {/* Variant selection as buttons */}
                     {product.variants.length > 1 && (
-                        <div className="grid grid-cols-4 md:flex gap-3 mt-2">
+                        <div className="flex flex-wrap gap-3 mt-2">
                             {product.variants.map((variant) => {
                                 const price = variant.pricing?.price?.gross;
                                 // const undiscounted = price?.amount + 10

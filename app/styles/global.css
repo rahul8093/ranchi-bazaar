@@ -30,3 +30,6 @@ body{
     transition-all duration-300 hover:border-green-500 hover:shadow-[0_0_12px_#83CA95] shadow-md
 } */
 
+.background-gradient{
+   background: linear-gradient(to bottom, #1c2340 0%, #1c2340 0%, #ffffff 31%)
+}
