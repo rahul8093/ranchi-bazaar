@@ -27,6 +27,9 @@ export const GET_CATEGORY_PRODUCTS = gql`
               }
             }
           }
+          variants {
+            id
+          }
         }
         cursor
       }
