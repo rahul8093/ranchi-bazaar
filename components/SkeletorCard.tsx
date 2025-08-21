@@ -36,8 +36,28 @@ interface SkeletonCardGroupProps {
 export function SkeletonCardGroup({ count = 1 }: SkeletonCardGroupProps) {
     return (
         <>
-            {Array.from({ length: count }).map((_, i) => (
+            {/* {Array.from({ length: count }).map((_, i) => (
                 <SkeletonCard key={i} />
+            ))} */}
+            {Array.from({ length: count }).map((_, index) => (
+                <div
+                    key={index}
+                    className="border rounded-x1 bg-white shadow-sm p-4 flex flex-col"
+                >
+                    {/* Image skeleton */}
+                    <div className="relative w-full h-44 mb-4 overflow-hidden bg-gray-100 rounded-lg">
+                        <Skeleton className="w-full h-full" />
+                    </div>
+
+                    {/* Product name skeleton */}
+                    <Skeleton className="h-5 w-3/4 mb-2 rounded" />
+
+                    {/* Price skeleton */}
+                    <Skeleton className="h-4 w-1/3 mb-4 rounded" />
+
+                    {/* Button skeleton */}
+                    <Skeleton className="h-10 w-full mt-auto rounded" />
+                </div>
             ))}
         </>
     );
@@ -249,5 +269,25 @@ export function HomePageSkeleton() {
                 </div>
             </section>
         </div>
+    );
+}
+
+interface CategoryProductListSkeletonProps {
+    count?: number;
+}
+
+export function CategoryProductListSkeleton({ count = 8 }: CategoryProductListSkeletonProps) {
+    return (
+        <><main className="p-6 max-w-7xl mx-auto space-y-8">
+
+                    <Skeleton className="h-8 w-[30%] text-4xl font-bold" />
+        {/* <section className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 max-w-7xl mx-auto space-y-8"> */}
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+            <SkeletonCardGroup count={count}/>
+        </section>
+
+        </main>
+
+        </>
     );
 }
