@@ -151,8 +151,8 @@ const Header = () => {
         total={totalPrice}
         updateCartItem={updateCartItem}
         removeCartItem={removeCartItem}
-        loadingProductId={loadingProductId}
-      />
+        loadingProductId={loadingProductId} 
+        cartCount={cartCount}      />
     </header>
   );
 };
