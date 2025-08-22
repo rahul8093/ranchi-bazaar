@@ -73,7 +73,7 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
                             <div className="h-full p-1 md:mx-6">
                                 <Card className="h-full flex flex-col p-0">
                                     <CardContent className="p-0 h-full flex">
-                                        <div className="flex flex-col w-full md:flex-row justify-around flex-col-reverse md:flex-col h-full bg-[#1c2340] relative md:rounded-2xl shadow-md items-stretch px-6 md:px-12 text-white">
+                                        <div className="flex w-full md:flex-row justify-around flex-col-reverse  h-full bg-[#1c2340] relative rounded-2xl shadow-md items-stretch px-6 md:px-12 text-white">
 
                                             {/* Left Text Section */}
                                             <div className="w-full md:w-1/2 py-10 space-y-4">
@@ -96,7 +96,7 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
                                                         alt={product.thumbnail.alt}
                                                         width={200}
                                                         height={200}
-                                                        className=" animate-pulse object-cover text-transparent inline-block absolute bottom-[0%] right-[-5%]"
+                                                        className=" object-cover text-transparent inline-block absolute bottom-[0%] right-[-5%]"
                                                     />)}
 
                                                 </div>

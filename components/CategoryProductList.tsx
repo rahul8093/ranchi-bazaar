@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SkeletonCardGroup } from "./SkeletorCard";
 import { Button } from "./ui/button";
 import { CircleMinus, CirclePlus, Loader2 } from "lucide-react";
 import { useCart } from "@/app/context/CartContext";
+import { useCartFly } from "@/app/context/CartFlyProvider";
 
 interface Product {
     id: string;
@@ -35,6 +36,8 @@ export function CategoryProductList({ categoryId }: Props) {
     const [after, setAfter] = useState<string | undefined>(undefined);
     const [hasNextPage, setHasNextPage] = useState(false);
     const [loading, setLoading] = useState(false);
+    const imageRefs = useRef<{ [productId: string]: HTMLDivElement | null }>({});
+    const { flyToCart } = useCartFly();
 
     // Use your Cart Context
     const {
@@ -101,6 +104,17 @@ export function CategoryProductList({ categoryId }: Props) {
 
                     const handleIncrease = async () => {
                         if (qty === 0) {
+                            const from = imageRefs.current[product.id]?.getBoundingClientRect();
+                            const to = document.querySelector('#cart-icon')?.getBoundingClientRect();
+
+                            if (from && to) {
+                                flyToCart({
+                                    imageUrl: product?.thumbnail?.url || '',
+                                    from,
+                                    to,
+                                });
+                            }
+
                             await addToCart(variantId, 1);
                         } else {
                             await updateCartItem(cartItem!.id, qty + 1);
@@ -122,7 +136,13 @@ export function CategoryProductList({ categoryId }: Props) {
                         >
                             {/* Clickable image + name */}
                             <Link href={`/product/${product.slug}`} className="cursor-pointer">
-                                <div className="relative w-full h-44 mb-4 overflow-hidden bg-gray-50 rounded-lg ">
+                                <div
+                                    className="relative w-full h-44 mb-4 overflow-hidden bg-gray-50 rounded-lg "
+                                    ref={(el) => {
+                                        imageRefs.current[product.id] = el;
+                                    }}
+
+                                >
                                     {product.thumbnail?.url && (
                                         <Image
                                             src={product.thumbnail.url}
@@ -131,6 +151,7 @@ export function CategoryProductList({ categoryId }: Props) {
                                             className="object-contain"
                                             sizes="(max-width: 768px) 100vw, 300px"
                                             priority={false}
+                                        // ref={imageRef}
                                         />
                                     )}
                                 </div>
@@ -147,83 +168,6 @@ export function CategoryProductList({ categoryId }: Props) {
                                 </p>
                             )}
 
-                            {/* Quantity controls */}
-                            {/* <div className="mt-auto flex items-center space-x-3">
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={handleDecrease}
-                                    disabled={qty === 0 || isLoading || cartLoading}
-                                    aria-label="Decrease quantity"
-                                    className="p-1 flex items-center justify-center"
-                                >
-                                    {isLoading ? (
-                                        <Loader2 className="animate-spin" size={16} />
-                                    ) : (
-                                        <CircleMinus size={16} />
-                                    )}
-                                </Button>
-
-                                <span className="text-gray-800 font-medium min-w-[24px] text-center">
-                                    {qty}
-                                </span>
-
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={handleIncrease}
-                                    disabled={isLoading || cartLoading}
-                                    aria-label="Increase quantity"
-                                    className="p-1 flex items-center justify-center"
-                                >
-                                    {isLoading ? (
-                                        <Loader2 className="animate-spin" size={16} />
-                                    ) : (
-                                        <CirclePlus size={16} />
-                                    )}
-                                </Button>
-                            </div> */}
-                            {/* {hasMultipleVariants ? (
-                                <Link href={`/product/${product.slug}`}>
-                                    <Button className="w-full mt-auto">View Product</Button>
-                                </Link>
-                            ) : (
-                                <div className="mt-auto flex items-center space-x-3">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={handleDecrease}
-                                        disabled={qty === 0 || isLoading || cartLoading}
-                                        aria-label="Decrease quantity"
-                                        className="p-1 flex items-center justify-center"
-                                    >
-                                        {isLoading ? (
-                                            <Loader2 className="animate-spin" size={16} />
-                                        ) : (
-                                            <CircleMinus size={16} />
-                                        )}
-                                    </Button>
-
-                                    <span className="text-gray-800 font-medium min-w-[24px] text-center">
-                                        {qty}
-                                    </span>
-
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={handleIncrease}
-                                        disabled={isLoading || cartLoading}
-                                        aria-label="Increase quantity"
-                                        className="p-1 flex items-center justify-center"
-                                    >
-                                        {isLoading ? (
-                                            <Loader2 className="animate-spin" size={16} />
-                                        ) : (
-                                            <CirclePlus size={16} />
-                                        )}
-                                    </Button>
-                                </div>
-                            )} */}
                             {hasMultipleVariants ? (
                                 <Link href={`/product/${product.slug}`}>
                                     <Button className="w-full mt-auto bg-emerald-600 hover:bg-emerald-700 ">View Product</Button>
@@ -259,7 +203,7 @@ export function CategoryProductList({ categoryId }: Props) {
                                         onClick={handleIncrease}
                                         disabled={isLoading}
                                         aria-label="Increase quantity"
-                                        className="p-1 flex items-center justify-center text-white text-green-600 hover:text-green-700"
+                                        className="p-1 flex items-center justify-center text-green-600 hover:text-green-700"
                                     >
                                         {isLoading ? <Loader2 className="animate-spin" size={16} /> : <CirclePlus size={16} />}
                                     </Button>

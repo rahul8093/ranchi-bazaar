@@ -2,11 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { fetchProducts, Product } from '../lib/saleor/queries/fetchProducts';
-import { useCart } from '../context/CartContext';
-import { Button } from '@/components/ui/button';
-import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { HomePageSkeleton } from '@/components/SkeletorCard';
 import HomepageHero from '@/components/HomePageHero';
@@ -14,6 +10,7 @@ import { Rabbit } from 'lucide-react';
 import { FaApple } from "react-icons/fa";
 import { SiXiaomi } from "react-icons/si";
 import { AiFillTrademarkCircle } from "react-icons/ai";
+import ProductCard from '@/components/product/ProductCard';
 
 
 const HomePage = () => {
@@ -34,7 +31,7 @@ const HomePage = () => {
 
     fetchData();
   }, []);
-  const { addToCart, loadingProductId, cartItems, updateCartItem } = useCart();
+
   const brands = [
     { brand: 'Apple', bg: 'bg-white', img: FaApple },
     { brand: 'Realme', bg: 'bg-yellow-100', img: SiXiaomi },
@@ -43,12 +40,12 @@ const HomePage = () => {
 
   if (loading) {
     return (
-        <HomePageSkeleton/>
-      )
+      <HomePageSkeleton />
+    )
   }
 
   return (
-    <div className="w-full">
+      <div className="w-full">
       <HomepageHero products={products} />
       <section className="md:container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
@@ -60,105 +57,13 @@ const HomePage = () => {
           </Link>
         </div>
 
-        <div className="flex overflow-x-auto gap-4 scrollbar-hide pb-4">
-          {products?.map((product) => {
-            const oldPrice = product.pricing.priceRange.start.gross.amount + 10000;
-            const newPrice = product.pricing.priceRange.start.gross.amount;
-            const discountPercent = Math.round(((oldPrice - newPrice) / oldPrice) * 100);
-            const saveAmount = oldPrice - newPrice;
-            const cartItem = cartItems.find(item => item.variant.id === product?.variants[0].id);
-            const quantity = cartItem?.quantity ?? 0;
-            const loading =
-              loadingProductId === product.variants[0].id ||
-              loadingProductId === cartItem?.id;
-
-
-            return (
-              <div
-                key={product.id}
-                className={`${loading ? 'animate-pulse' : ""}hover:border-green-500 min-w-[160px] border rounded-2xl shadow-md hover:shadow-md relative flex flex-col justify-between`}
-              >
-                {/* Discount badge */}
-                <div className="absolute shadow-sm rounded-lg top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
-                  {discountPercent}% OFF
-                </div>
-
-
-
-                {/* Image */}
-                <Link href={`/product/${product.slug}`}>
-                  <div className="relative w-full h-44 mb-2 bg-gray-100 rounded-2xl shadow-sm">
-                    <Image
-                      src={product.thumbnail.url}
-                      alt={product.thumbnail.alt || product.name}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                </Link>
-
-                <div className='px-4 pb-4'>
-                  {/* Product Name */}
-                  <Link href={`/product/${product.slug}`}>
-                    <h3 className="text-sm font-medium text-black md:w-36">{product.name}</h3>
-                  </Link>
-
-                  {/* Prices */}
-                  <p className="text-xs line-through text-gray-400">₹{oldPrice}</p>
-                  <p className="text-green-600 font-semibold text-sm">₹{newPrice}</p>
-                  <p className="text-xs text-green-500 mb-2">Save ₹{saveAmount}</p>
-                </div>
-
-                {/* Button */}
-                <div >
-                  <div className="mt-auto text-sm w-16 absolute bottom-[-2%] right-[-6%] bg-white">
-                    {loading ? (
-                      <Button size="sm" disabled
-                        className=' w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white cursor-not-allowed'>
-                        <Loader2Icon className="animate-spin" />
-                        {/* Please wait */}
-                      </Button>
-                    ) : quantity > 0 ? (
-                      <div className="flex items-center justify-between border border-green-500 rounded bg-white ">
-                        <button
-                          onClick={() => {
-                            if (cartItem) {
-                              updateCartItem(cartItem.id, cartItem.quantity - 1);
-                            }
-                          }}
-
-                          className="w-10 text-green-700 py-1 hover:bg-green-50"
-                        >
-                          –
-                        </button>
-                        <span className="text-green-700">{quantity}</span>
-                        <button
-                          onClick={() => {
-                            if (cartItem) {
-                              updateCartItem(cartItem.id, cartItem.quantity + 1);
-                            }
-                          }}
-                          className="w-10 text-green-700 py-1 hover:bg-green-50"
-                        >
-                          +
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => addToCart(product.variants[0].id)}
-                        className=" w-full border border-green-500 text-green-700 py-1 rounded bg-white hover:bg-green-50"
-                      >
-                        ADD
-                      </button>
-                    )}
-                  </div>
-
-                </div>
-
-              </div>
-            );
-          })}
+        {/* product card */}
+        <div className="flex overflow-x-auto gap-4 scrollbar-hide p-4 overflow-visible">
+          {products?.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
+
       </section>
 
 
@@ -253,6 +158,7 @@ const HomePage = () => {
         </div>
       </section>
     </div>
+    
   );
 };
 

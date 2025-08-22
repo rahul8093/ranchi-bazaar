@@ -4,8 +4,9 @@ import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "./context/CartContext";
-import Header from "@/components/Header";
+import Header from "@/components/header/Header";
 import Footer from "@/components/Footer";
+import { CartFlyProvider } from "./context/CartFlyProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-         <AuthProvider>
+        <AuthProvider>
           <CartProvider>
-            <Header/>
-          {children}
-          <Footer/>
-          <Toaster position="top-right" />
+            <Header />
+            <CartFlyProvider>
+              {children}
+            </CartFlyProvider>
+            <Footer />
+            <Toaster position="top-right" />
           </CartProvider>
         </AuthProvider>
       </body>

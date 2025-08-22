@@ -1,6 +1,5 @@
 "use client";
 
-import { getMenuItems } from "@/app/lib/saleor/helpers/getMenu";
 import { MenuItem, MenuChild } from "@/app/lib/saleor/types/menu";
 import {
     NavigationMenu,
@@ -11,28 +10,21 @@ import {
     NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronUp } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { SkeletonCardGroupSmall } from "./SkeletorCard";
 
-export function CategoryNavigationMenu() {
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-
-    useEffect(() => {
-        async function fetchMenu() {
-            const menu = await getMenuItems();
-            if (menu?.items) {
-                setMenuItems(menu.items);
-            }
-        }
-        fetchMenu();
-    }, []);
+interface CategoryNavigationMenuProps {
+    items: MenuItem[];
+    loading?: boolean;
+}
+export function CategoryNavigationMenu({ items }: CategoryNavigationMenuProps) {
 
     return (
-        <NavigationMenu viewport={false} className="bg-white border-t shadow-sm py-2 px-4 scrollbar-hide">
+        <NavigationMenu viewport={false} className="hidden  md:flex bg-white border-t shadow-sm py-2 px-4 scrollbar-hide">
             <NavigationMenuList>
-                {menuItems.map((item) => (
+                {items?.map((item) => (
                     <NavigationMenuItem key={item.id}>
                         <NavigationMenuTrigger className="rounded-x1 shadow-md">{item.name}</NavigationMenuTrigger>
                         {item.children.length > 0 && (
@@ -59,29 +51,15 @@ export function CategoryNavigationMenu() {
     );
 }
 
-export function MobileCategoryNavigationMenu() {
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+export function MobileCategoryNavigationMenu({ items, loading }: CategoryNavigationMenuProps) {
+
     const [expandedId, setExpandedId] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false)
-
-    useEffect(() => {
-        async function fetchMenu() {
-            setLoading(true)
-            const menu = await getMenuItems();
-            if (menu?.items) {
-                setMenuItems(menu.items);
-                setLoading(false)
-            }
-        }
-        fetchMenu();
-    }, []);
-
 
     return (
-        <nav className="block md:hidden bg-white border-t shadow-sm px-4 py-2">
+        <nav className="block md:hidden bg-white border-t shadow-sm px-4 py-2 rounded-sm">
             {loading && <SkeletonCardGroupSmall count={4} />}
             <ul className="space-y-2">
-                {menuItems.map((item) => (
+                {items?.map((item) => (
                     <li key={item.id}>
                         <button
                             className="w-full flex justify-between items-center text-left font-semibold text-gray-800"
