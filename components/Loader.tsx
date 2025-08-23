@@ -20,7 +20,7 @@ export const RippleLoaderCircle = ({
                 <span className="ripple-circle animate-ripple-delay absolute overflow-hidden"></span>
             </div>
 
-            <span className={clsx('z-20', 'relative',className)}>
+            <span className={clsx('z-20', '',className)}>
                 {spinCircle?<Loader2Icon className='animate-spin'/>:children}
             </span>
         </div>
