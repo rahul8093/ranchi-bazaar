@@ -26,12 +26,12 @@ const MiddleBar = ({ setIsSidebarOpen, setMiniCartOpen, mobileMenuOpen, setMobil
     const { loading } = useCurrentUser();
 
     return (
-        <div className="bg-white shadow-md py-2 px-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className="bg-white mb-1.5 shadow-md rounded-b-2xl md:rounded-full py-2 px-4 flex items-center justify-between gap-4 flex-wrap">
             {/* Sidebar + Logo */}
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => setIsSidebarOpen(true)}
-                    className="hidden md:flex w-10 h-10 bg-white rounded-lg shadow items-center justify-center hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]"
+                    className="hidden md:flex w-10 h-10 bg-white rounded-full shadow items-center justify-center hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]"
                 >
                     <HiMenuAlt2 />
                 </button>
@@ -42,7 +42,7 @@ const MiddleBar = ({ setIsSidebarOpen, setMiniCartOpen, mobileMenuOpen, setMobil
             </div>
 
             {/* Search */}
-            <div className="relative flex-1 max-w-[507px] w-full hidden md:block hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]">
+            <div className="relative rounded-full flex-1 max-w-[507px] w-full hidden md:block hover:border-green-500 hover:shadow-[0_0_12px_#83CA95]">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
                     <SearchIcon />
                 </div>
@@ -52,7 +52,7 @@ const MiddleBar = ({ setIsSidebarOpen, setMiniCartOpen, mobileMenuOpen, setMobil
                 <input
                     type="text"
                     placeholder="Search essentials, groceries and more..."
-                    className="rounded-x1 shadow-md w-full text-black pl-8 pr-8 py-2 border rounded-md text-sm shadow-md-rb focus-visible:border-green-500"
+                    className="rounded-full shadow-md w-full text-black pl-8 pr-8 py-2 border text-sm shadow-md-rb focus-visible:border-green-500"
                 />
             </div>
 

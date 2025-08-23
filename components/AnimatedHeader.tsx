@@ -24,7 +24,7 @@ export default function AnimatedStickyHeader({ children }: { children: React.Rea
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -20, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed top-0 left-0 w-full z-50 shadow bg-white"
+          className="fixed top-0 left-0 w-full z-50"
         >
           {children}
         </motion.div>

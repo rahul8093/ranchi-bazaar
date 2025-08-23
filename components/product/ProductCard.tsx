@@ -3,12 +3,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Loader2Icon } from 'lucide-react';
+// import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/app/lib/saleor/queries/fetchProducts';
 import { useCart } from '@/app/context/CartContext';
 import { useCartFly } from '@/app/context/CartFlyProvider';
 import { useRef } from 'react';
+import { RippleWithHoverButton } from '../ui/RippleWithHoverButton';
+import { RippleLoaderCircle } from '../Loader';
 
 type ProductCardProps = {
     product: Product;
@@ -25,11 +27,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
     const saveAmount = oldPrice - newPrice;
     const cartItem = cartItems.find(item => item.variant.id === product?.variants[0].id);
     const quantity = cartItem?.quantity ?? 0;
+
     const loading =
         loadingProductId === product.variants[0].id ||
         loadingProductId === cartItem?.id;
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         const from = imageRef.current?.getBoundingClientRect();
         const to = document.querySelector('#cart-icon')?.getBoundingClientRect();
 
@@ -41,13 +44,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
             });
         }
 
-        addToCart(product.variants[0].id);
+        addToCart(product.variants[0].id)
     };
 
     return (
         <div
             className={`${loading ? 'animate-pulse' : ""} hover:border-green-500 min-w-[160px] border rounded-2xl shadow-md hover:shadow-md relative flex flex-col justify-between`}
         >
+            {/* <RippleLoader
+
+            /> */}
+
             {/* Discount badge */}
             <div className="absolute shadow-sm top-2 right-2 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded z-10">
                 {discountPercent}% OFF
@@ -83,9 +90,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
             {/* Add to Cart / Quantity */}
             <div>
                 <div className="mt-auto text-sm w-16 absolute bottom-[-2%] right-[-6%] bg-white">
-                    {loading ? (
+                    {(loading) ? (
                         <Button size="sm" disabled className="w-full border border-green-500 text-green-700 text-sm py-1 rounded bg-white cursor-not-allowed">
-                            <Loader2Icon className="animate-spin" />
+                            <RippleLoaderCircle spinCircle />
                         </Button>
                     ) : quantity > 0 ? (
                         <div className="flex items-center justify-between border border-green-500 rounded bg-white">
@@ -104,12 +111,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
                             </button>
                         </div>
                     ) : (
-                        <button
-                            onClick={handleAddToCart}
-                            className="w-full border border-green-500 text-green-700 py-1 rounded bg-white hover:bg-green-50"
-                        >
+                        <RippleWithHoverButton
+                            className={`${loading ? 'pointer-events-none text-shadow-emerald-700 flex justify-center' : ''} border w-full rounded hover:bg-green-50 border-green-500 py-1 text-green-700 z-20`}
+                            onClick={handleAddToCart}>
                             ADD
-                        </button>
+                        </RippleWithHoverButton>
                     )}
                 </div>
             </div>

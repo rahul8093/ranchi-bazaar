@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import TopBar from './TopBar';
+// import TopBar from './TopBar';
 import MiddleBar from './MiddleBar';
 import { useCart } from '@/app/context/CartContext';
 import MiniCart from '../MiniCart';
@@ -9,6 +9,7 @@ import { MenuItem } from '@/app/lib/saleor/types/menu';
 import { getMenuItems } from '@/app/lib/saleor/helpers/getMenu';
 import { CategoryNavigationMenu, MobileCategoryNavigationMenu } from '../CategoryNavigationMenu';
 import AnimatedStickyHeader from '../AnimatedHeader';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Header = () => {
   const { cartCount, cartItems, totalPrice, updateCartItem, removeCartItem, loadingProductId } = useCart();
@@ -33,8 +34,8 @@ const Header = () => {
       }, []);
 
   return (
-    <header className="w-full md:mb-8">
-      <TopBar />
+    <header className="w-full py-1.5 rounded-b-2xl">
+      {/* <TopBar /> */}
       <AnimatedStickyHeader>
         <MiddleBar
         setIsSidebarOpen={setIsSidebarOpen}
@@ -52,7 +53,21 @@ const Header = () => {
         isSidebarOpen={isSidebarOpen}
       />
       <CategoryNavigationMenu items={menuItems} />
-      {mobileMenuOpen && <MobileCategoryNavigationMenu items={menuItems} loading={loadingMenu} />}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            key="mobile-nav"
+            initial={{ opacity: 0, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, filter: 'blur(8px)' }}
+            transition={{ duration: 0.35 }}
+          >
+            <MobileCategoryNavigationMenu items={menuItems} loading={loadingMenu} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
       <MiniCart
         isOpen={isMiniCartOpen}
         onClose={() => setMiniCartOpen(false)}

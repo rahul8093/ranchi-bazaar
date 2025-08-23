@@ -126,13 +126,13 @@ export default function MiniCart({
                             <span>${total.toFixed(2)}</span>
                         </div>
                         <Button
-                            className="w-full bg-green-600 text-white hover:bg-green-700"
+                            className="w-full rounded-full bg-green-600 text-white hover:bg-green-700"
                             onClick={() => {
                                 router.push('/cart')
                                 onClose()
                             }}
                         >
-                            Go to Checkout
+                            Go to Cart
                         </Button>
                     </SheetFooter>
                 )}

@@ -16,6 +16,7 @@ import { parseSaleorDescription } from '@/app/lib/saleor/helpers/common';
 import { Card, CardContent } from "./ui/card";
 import { useMediaQuery } from '@react-hook/media-query'
 import Link from "next/link";
+import { RippleWithHoverButton } from "./ui/RippleWithHoverButton";
 
 interface HomepageHeroProps {
     products: Product[];
@@ -87,9 +88,15 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
 
                                                 <div className="block">
                                                     <Link href={`/product/${product?.slug}`}>
-                                                        <button className="mt-4 bg-white text-black font-semibold px-6 py-2 rounded hover:bg-gray-200 transition">
+                                                        <RippleWithHoverButton
+                                                            className="mt-4 bg-white text-black font-semibold px-6 py-2 rounded-full hover:bg-gray-200 transition"
+                                                            hoverEffect={{
+                                                                scale: 1.03,
+                                                                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                                                            }}
+                                                        >
                                                             Shop Now
-                                                        </button>
+                                                        </RippleWithHoverButton>
                                                     </Link>
                                                     {isMobile && (<Image
                                                         src={product.thumbnail.url}

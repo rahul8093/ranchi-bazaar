@@ -22,13 +22,15 @@ interface CategoryNavigationMenuProps {
 export function CategoryNavigationMenu({ items }: CategoryNavigationMenuProps) {
 
     return (
-        <NavigationMenu viewport={false} className="hidden  md:flex bg-white border-t shadow-sm py-2 px-4 scrollbar-hide">
+        <NavigationMenu viewport={false} className="hidden rounded-full md:flex py-2 px-4 scrollbar-hide">
             <NavigationMenuList>
                 {items?.map((item) => (
                     <NavigationMenuItem key={item.id}>
-                        <NavigationMenuTrigger className="rounded-x1 shadow-md">{item.name}</NavigationMenuTrigger>
+                        <NavigationMenuTrigger className="rounded-full shadow-md hover:scale-105 transform transition-all ease-in-out">
+                            {item.name}
+                        </NavigationMenuTrigger>
                         {item.children.length > 0 && (
-                            <NavigationMenuContent className="z-50 absolute w-max">
+                            <NavigationMenuContent className="z-50 absolute w-max rounded-full">
                                 <ul className="grid gap-2 p-2">
                                     {item.children.map((child: MenuChild) => (
                                         <li key={child.id}>
@@ -56,7 +58,7 @@ export function MobileCategoryNavigationMenu({ items, loading }: CategoryNavigat
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     return (
-        <nav className="block md:hidden bg-white border-t shadow-sm px-4 py-2 rounded-sm">
+        <nav className="block md:hidden bg-white shadow-sm px-4 py-2 rounded-b-2xl">
             {loading && <SkeletonCardGroupSmall count={4} />}
             <ul className="space-y-2">
                 {items?.map((item) => (

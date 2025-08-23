@@ -1,19 +1,29 @@
-// components/Loader.tsx
+import clsx from 'clsx';
+import { Loader2Icon } from 'lucide-react';
 
-import React from "react";
-// import Logo from "./Logo/Logo";
+interface RippleLoadingButtonProps {
+    children?: React.ReactNode;
+    className?: string;
+    spinCircle?:boolean;
+}
 
-const Loader = () => {
+export const RippleLoaderCircle = ({
+
+    children = '',
+    className,
+    spinCircle = false
+}: RippleLoadingButtonProps) => {
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="flex flex-row gap-2">
-                <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.7s]"></div>
-                <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.3s]"></div>
-                <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.7s]"></div>
+        <div className='overflow-hidden'>
+            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                <span className="ripple-circle animate-ripple absolute overflow-hidden" style={{ animationDelay: '0.5s' }}></span>
+                <span className="ripple-circle animate-ripple-delay absolute overflow-hidden"></span>
             </div>
+
+            <span className={clsx('z-20', 'relative',className)}>
+                {spinCircle?<Loader2Icon className='animate-spin'/>:children}
+            </span>
         </div>
 
     );
 };
-
-export default Loader;
