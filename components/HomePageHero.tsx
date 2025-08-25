@@ -87,7 +87,7 @@ export default function HomepageHero({ products }: HomepageHeroProps) {
                                                 </p>
 
                                                 <div className="block">
-                                                    <Link href={`/product/${product?.slug}`}>
+                                                    <Link  href={`/product/${product?.slug}`}>
                                                         <RippleWithHoverButton
                                                             className="mt-4 overflow-hidden bg-white text-black font-semibold px-6 py-2 rounded-full hover:bg-gray-200 transition"
                                                             hoverEffect={{
