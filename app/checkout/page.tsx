@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { useCart } from '@/app/context/CartContext'
 import toast from 'react-hot-toast'
-// import { useRouter } from 'next/navigation'
+import { RazorpayPaymentResponse } from '../lib/saleor/types/razorpay'
+import { loadRazorpayScript } from '../lib/razorpay/loadScript'
 
 export default function CheckoutPage() {
-  // const router = useRouter()
   const { cartItems, totalPrice, cartLoading } = useCart()
 
   const [form, setForm] = useState({
@@ -26,8 +26,21 @@ export default function CheckoutPage() {
   }
 
   const handleSubmit = async () => {
+
+    const scriptLoaded = await loadRazorpayScript()
+    if (!scriptLoaded) {
+      toast.error("Failed to load Razorpay SDK")
+      return
+    }
     // Basic validation
-    if (!form.fullName || !form.email || !form.address || !form.city || !form.zip || !form.country) {
+    if (
+      !form.fullName ||
+      !form.email ||
+      !form.address ||
+      !form.city ||
+      !form.zip ||
+      !form.country
+    ) {
       toast.error('Please fill in all required fields')
       return
     }
@@ -35,7 +48,8 @@ export default function CheckoutPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/checkout', {
+      // Step 1: Create Saleor order via your existing API
+      const checkoutResponse = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -48,25 +62,91 @@ export default function CheckoutPage() {
             city: form.city,
             postalCode: form.zip,
             streetAddress1: form.address,
-            countryArea: 'Jharkhand'
+            countryArea: 'Jharkhand', // optional
           },
         }),
       })
 
-      const data = await response.json()
+      const checkoutData = await checkoutResponse.json()
 
-      if (!response.ok) {
-        toast.error(data.error || 'Checkout failed')
+      if (!checkoutResponse.ok) {
+        toast.error(checkoutData.error || 'Checkout failed')
         setLoading(false)
         return
       }
 
-      toast.success('Order placed successfully!')
-      // router.push('/thank-you')
-    } catch (err) {
-      toast.error('Something went wrong')
-      console.error(err)
-    } finally {
+      // You should get Saleor order ID here (adjust according to your response)
+      const saleorOrderId = checkoutData.saleorOrderId
+      if (!saleorOrderId) {
+        toast.error('Saleor order ID not found')
+        setLoading(false)
+        return
+      }
+
+      // Step 2: Create Razorpay order
+      const razorpayOrderRes = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalPrice, // amount in INR (decimal)
+          receipt: saleorOrderId,
+        }),
+      })
+
+      const razorpayOrder = await razorpayOrderRes.json()
+
+      if (!razorpayOrderRes.ok || razorpayOrder.error) {
+        toast.error('Failed to create Razorpay order')
+        setLoading(false)
+        return
+      }
+
+      // Step 3: Open Razorpay Checkout UI
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        order_id: razorpayOrder.id,
+        handler: async (response: RazorpayPaymentResponse) => {
+          // Step 4: Verify payment on your backend
+          const verifyRes = await fetch('/api/razorpay/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              saleor_order_id: saleorOrderId,
+            }),
+          })
+
+          const verifyData = await verifyRes.json()
+
+          if (verifyRes.ok && verifyData.success) {
+            toast.success('Payment successful! Order completed.')
+            // Optionally redirect to thank-you page
+            // router.push('/thank-you')
+          } else {
+            toast.error('Payment verification failed.')
+          }
+          setLoading(false)
+        },
+        prefill: {
+          name: form.fullName,
+          email: form.email,
+          contact: form.phone,
+        },
+        theme: {
+          color: '#3399cc',
+        },
+      }
+
+      const rzp = new window.Razorpay(options);
+      console.log(rzp, 'rzp')
+      rzp.open()
+    } catch (error) {
+      toast.error('Something went wrong during payment')
+      console.error(error)
       setLoading(false)
     }
   }
@@ -107,7 +187,7 @@ export default function CheckoutPage() {
           />
           <input
             type="text"
-            placeholder="Country Code (e.g. US)"
+            placeholder="Country Code (e.g. IN)"
             value={form.country}
             onChange={e => handleChange('country', e.target.value)}
             className="p-2 border"
@@ -139,7 +219,7 @@ export default function CheckoutPage() {
           />
         </div>
         <button
-          disabled={loading}
+          // disabled={loading}
           onClick={handleSubmit}
           className="mt-6 w-full py-3 bg-green-600 text-white font-bold rounded hover:bg-green-700 disabled:opacity-50"
         >
@@ -152,7 +232,9 @@ export default function CheckoutPage() {
         <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
         {cartItems.map(item => (
           <div key={item.id} className="flex justify-between mb-2">
-            <span>{item.variant.name} x{item.quantity}</span>
+            <span>
+              {item.variant.name} x{item.quantity}
+            </span>
             <span>${item.variant.pricing.price?.gross.amount.toFixed(2)}</span>
           </div>
         ))}

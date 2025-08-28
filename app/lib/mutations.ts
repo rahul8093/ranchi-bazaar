@@ -190,3 +190,12 @@ export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
     }
   }
 `;
+
+export const CHECKOUT_BY_TOKEN_QUERY = gql`
+  query CheckoutByToken($token: UUID!) {
+    checkout(token: $token) {
+      id
+      token
+    }
+  }
+`;
